@@ -161,7 +161,6 @@ public class SpellCastHandler {
                     WynnanimatedClient.THROW_ANIMATION,
                     speed(WynnanimatedClient.THROW_SHAMAN_SPEED, attackSpeed)
             );
-                System.out.println("Animation speed is: " + speed(WynnanimatedClient.THROW_SHAMAN_SPEED, attackSpeed).speed);
             }
 
         }
@@ -169,8 +168,8 @@ public class SpellCastHandler {
     }
 
 
-    private static SpeedModifier speed(float baseSpeed, float multiplier) {
-        return new SpeedModifier(baseSpeed * multiplier);
+    private static float speed(float baseSpeed, float multiplier) {
+        return (baseSpeed * multiplier);
     }
 
     private static float computeAttackSpeedMultiplier(ItemStack stack) {

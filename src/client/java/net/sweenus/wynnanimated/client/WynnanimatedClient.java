@@ -19,9 +19,7 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -31,27 +29,27 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final String WYNNTILS_MOD_ID = "wynntils";
 
     public static final Identifier SPIN_ANIMATION = Identifier.of(MOD_ID, "spin");
-    public static final SpeedModifier SPIN_SPEED = new SpeedModifier(2.5f);
+    public static final float SPIN_SPEED = 2.5f;
     public static final Identifier SPIN_LONG_ANIMATION = Identifier.of(MOD_ID, "spin_long");
-    public static final SpeedModifier SPIN_LONG_SPEED = new SpeedModifier(2.5f);
+    public static final float SPIN_LONG_SPEED = 2.5f;
     public static final Identifier THROW_ANIMATION = Identifier.of(MOD_ID, "throw");
-    public static final SpeedModifier THROW_SPEED = new SpeedModifier(1.9f);
+    public static final float THROW_SPEED = 1.9f;
     public static final float THROW_SHAMAN_SPEED = 1.0f;
     public static final Identifier RANGED_SLASH_ANIMATION = Identifier.of(MOD_ID, "ranged_slash");
-    public static final SpeedModifier RANGED_SLASH_SPEED = new SpeedModifier(2.1f);
+    public static final float RANGED_SLASH_SPEED = 2.1f;
     public static final Identifier SLAM_ANIMATION = Identifier.of(MOD_ID, "two_handed_slam");
-    public static final SpeedModifier SLAM_SPEED = new SpeedModifier(2.1f);
+    public static final float SLAM_SPEED = 2.1f;
     public static final Identifier UP_SLASH_ANIMATION = Identifier.of(MOD_ID, "up_slash");
-    public static final SpeedModifier UP_SLASH_SPEED = new SpeedModifier(1.4f);
+    public static final float UP_SLASH_SPEED = 1.4f;
     public static final Identifier GROUND_CLEAVE_ANIMATION = Identifier.of(MOD_ID, "ground_cleave");
-    public static final SpeedModifier GROUND_CLEAVE_SPEED = new SpeedModifier(2.1f);
+    public static final float GROUND_CLEAVE_SPEED = 2.1f;
     public static final Identifier BATTLECRY_ANIMATION = Identifier.of(MOD_ID, "battlecry");
-    public static final SpeedModifier BATTLECRY_SPEED = new SpeedModifier(1.5f);
+    public static final float BATTLECRY_SPEED = 1.5f;
 
 
     public static final Identifier RAPIDFIRE_HORIZONTAL_ANIMATION = Identifier.of(MOD_ID, "rapidfire_horizontal");
     public static final float RAPIDFIRE_HORIZONTAL_SPEED = 1.0f;
-    public static final SpeedModifier RAPIDFIRE_HORIZONTAL_SLOW_SPEED = new SpeedModifier(2.1f);
+    public static final float RAPIDFIRE_HORIZONTAL_SLOW_SPEED = 2.1f;
     public static final Identifier SLASH_RIGHT_ANIMATION = Identifier.of(MOD_ID, "slash_right");
     public static final float SLASH_RIGHT_SPEED = 1.0f;
     public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
@@ -61,7 +59,7 @@ public class WynnanimatedClient implements ClientModInitializer {
 
 
     public static final Identifier TEST_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing");
-    public static final SpeedModifier TEST_SPEED = new SpeedModifier(1.2f);
+    public static final float TEST_SPEED = 1.2f;
 
     public static List<Identifier> basicAttackList = new ArrayList<>();
 
@@ -131,10 +129,24 @@ public class WynnanimatedClient implements ClientModInitializer {
         System.out.println("Registered WynnAnimated animations");
     }
 
-    public static void playAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation, SpeedModifier animationSpeed) {
+    private static final Map<Identifier, SpeedModifier> speedModifiers = new HashMap<>();
+
+    public static void playAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation, float speedValue) {
         var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
         if (animation != null) {
-            animation.addModifier(animationSpeed, 0);
+            SpeedModifier speedMod = speedModifiers.get(selectedAnimation);
+
+            if (speedMod == null) {
+                // First time - create and add the modifier
+                speedMod = new SpeedModifier(speedValue);
+                animation.addModifier(speedMod, 0);
+                speedModifiers.put(selectedAnimation, speedMod);
+            } else {
+                // Update the existing modifier's speed
+                speedMod.speed = speedValue;  // Assuming SpeedModifier has a public speed field
+                System.out.println("Updated existing animation speed modifier to " + speedMod.speed);
+            }
+
             animation.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(2, Ease.INOUTSINE),
                     new KeyframeAnimationPlayer((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(selectedAnimation))
                             .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL)
