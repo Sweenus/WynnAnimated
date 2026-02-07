@@ -19,6 +19,12 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+
 public class WynnanimatedClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("WynnAnimated");
     public static final String MOD_ID = "wynnanimated";
@@ -30,23 +36,34 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final SpeedModifier SPIN_LONG_SPEED = new SpeedModifier(2.5f);
     public static final Identifier THROW_ANIMATION = Identifier.of(MOD_ID, "throw");
     public static final SpeedModifier THROW_SPEED = new SpeedModifier(1.9f);
+    public static final float THROW_SHAMAN_SPEED = 1.0f;
     public static final Identifier RANGED_SLASH_ANIMATION = Identifier.of(MOD_ID, "ranged_slash");
     public static final SpeedModifier RANGED_SLASH_SPEED = new SpeedModifier(2.1f);
     public static final Identifier SLAM_ANIMATION = Identifier.of(MOD_ID, "two_handed_slam");
     public static final SpeedModifier SLAM_SPEED = new SpeedModifier(2.1f);
-    public static final Identifier UPWARD_SLASH_ANIMATION = Identifier.of(MOD_ID, "upward_slash");
-    public static final SpeedModifier UPWARD_SLASH_SPEED = new SpeedModifier(2.1f);
+    public static final Identifier UP_SLASH_ANIMATION = Identifier.of(MOD_ID, "up_slash");
+    public static final SpeedModifier UP_SLASH_SPEED = new SpeedModifier(1.4f);
     public static final Identifier GROUND_CLEAVE_ANIMATION = Identifier.of(MOD_ID, "ground_cleave");
     public static final SpeedModifier GROUND_CLEAVE_SPEED = new SpeedModifier(2.1f);
+    public static final Identifier BATTLECRY_ANIMATION = Identifier.of(MOD_ID, "battlecry");
+    public static final SpeedModifier BATTLECRY_SPEED = new SpeedModifier(1.5f);
 
 
     public static final Identifier RAPIDFIRE_HORIZONTAL_ANIMATION = Identifier.of(MOD_ID, "rapidfire_horizontal");
-    public static final SpeedModifier RAPIDFIRE_HORIZONTAL_SPEED = new SpeedModifier(2.1f);
-    public static final SpeedModifier RAPIDFIRE_HORIZONTAL_SLOW_SPEED = new SpeedModifier(0.9f);
+    public static final float RAPIDFIRE_HORIZONTAL_SPEED = 1.0f;
+    public static final SpeedModifier RAPIDFIRE_HORIZONTAL_SLOW_SPEED = new SpeedModifier(2.1f);
     public static final Identifier SLASH_RIGHT_ANIMATION = Identifier.of(MOD_ID, "slash_right");
-    public static final SpeedModifier SLASH_RIGHT_SPEED = new SpeedModifier(2.1f);
+    public static final float SLASH_RIGHT_SPEED = 1.0f;
     public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
-    public static final SpeedModifier SLASH_LEFT_SPEED = new SpeedModifier(2.1f);
+    public static final float SLASH_LEFT_SPEED = 1.0f;
+    public static final Identifier SWING_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing");
+    public static final float SWING_SPEED = 1.0f;
+
+
+    public static final Identifier TEST_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing");
+    public static final SpeedModifier TEST_SPEED = new SpeedModifier(1.2f);
+
+    public static List<Identifier> basicAttackList = new ArrayList<>();
 
     public static boolean shouldShowArms = true; // Make this configurable later
     public static final FirstPersonConfiguration firstPersonConfiguration = new FirstPersonConfiguration();
@@ -55,6 +72,7 @@ public class WynnanimatedClient implements ClientModInitializer {
     public void onInitializeClient() {
         registerAnimations();
         setFirstPersonConfiguration();
+        createLists();
     }
 
     public static void setFirstPersonConfiguration() {
@@ -88,7 +106,7 @@ public class WynnanimatedClient implements ClientModInitializer {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SLAM_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPWARD_SLASH_ANIMATION, 10,
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UP_SLASH_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(GROUND_CLEAVE_ANIMATION, 10,
@@ -101,6 +119,13 @@ public class WynnanimatedClient implements ClientModInitializer {
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SLASH_LEFT_ANIMATION, 9,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BATTLECRY_ANIMATION, 10,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TEST_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         System.out.println("Registered WynnAnimated animations");
@@ -127,5 +152,28 @@ public class WynnanimatedClient implements ClientModInitializer {
         if (layer != null && layer.getData().getName().equals(selectedAnimation))
             layer.stop();
     }
+
+    public static boolean isPlayingCustomAnimation(AbstractClientPlayerEntity player, Identifier animation) {
+        return Objects.requireNonNull(PlayerAnimationAccess.getPlayerAssociatedData(player).get(animation)).isActive();
+    }
+
+    public static void createLists() {
+        basicAttackList.add(SWING_ANIMATION);
+        basicAttackList.add(RAPIDFIRE_HORIZONTAL_ANIMATION);
+        basicAttackList.add(SLASH_LEFT_ANIMATION);
+        basicAttackList.add(SLASH_RIGHT_ANIMATION);
+        basicAttackList.add(THROW_ANIMATION);
+    }
+
+    public static boolean isPlayingAnyAnimation(AbstractClientPlayerEntity player, List<Identifier> list) {
+        AtomicBoolean inUse = new AtomicBoolean(false);
+        list.forEach(identifier -> {
+            if (Objects.requireNonNull(PlayerAnimationAccess.getPlayerAssociatedData(player).get(identifier)).isActive())
+                inUse.set(true);
+        });
+
+        return inUse.get();
+    }
+
 
 }

@@ -1,0 +1,127 @@
+{
+  "name": "swift_dagger_stab",
+  "author": "Sweenus",
+  "description": "Fast one-handed dagger thrust",
+  "emote": {
+    "isLoop": "false",
+    "returnTick": 2,
+    "beginTick": 2,
+    "endTick": 10,
+    "stopTick": 14,
+    "degrees": false,
+    "moves": [
+
+      {
+        "tick": 6,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "head": { "pitch": -0.25 }
+      },
+
+      {
+        "tick": 4,
+        "easing": "EASEINQUAD",
+        "turn": 0,
+        "torso": { "pitch": -0.15 }
+      },
+      {
+        "tick": 6,
+        "easing": "EASEOUTQUAD",
+        "turn": 0,
+        "torso": { "pitch": -0.55 }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "torso": { "pitch": -0.25 }
+      },
+
+      {
+        "tick": 3,
+        "easing": "EASEINQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -1.2,
+          "yaw": 0.35,
+          "x": -4.2,
+          "z": 1.4
+        }
+      },
+      {
+        "tick": 6,
+        "easing": "EASEOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -0.2,
+          "yaw": -0.05,
+          "x": -4.8,
+          "z": -2.4
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -0.6,
+          "yaw": 0.1,
+          "x": -4.4,
+          "z": -1.2
+        }
+      },
+
+      {
+        "tick": 6,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "leftArm": {
+          "pitch": -0.4,
+          "yaw": -0.4,
+          "z": 0.8
+        }
+      },
+
+      {
+        "tick": 3,
+        "easing": "EASEINQUAD",
+        "turn": 0,
+        "rightItem": {
+          "z": -0.6,
+          "pitch": -0.3
+        }
+      },
+      {
+        "tick": 6,
+        "easing": "EASEOUTQUAD",
+        "turn": 0,
+        "rightItem": {
+          "z": -2.2,
+          "pitch": 0.1
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightItem": {
+          "z": -1.2,
+          "pitch": -0.1
+        }
+      },
+
+      {
+        "tick": 6,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightLeg": { "pitch": -0.1 }
+      },
+      {
+        "tick": 6,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "leftLeg": { "pitch": 0.1 }
+      }
+    ]
+  }
+}

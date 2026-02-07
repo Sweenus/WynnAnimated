@@ -1,7 +1,10 @@
 package net.sweenus.wynnanimated.client.util;
 
+import dev.kosmx.playerAnim.api.layered.modifier.SpeedModifier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import net.sweenus.wynnanimated.client.WynnanimatedClient;
 
 public class SpellCastHandler {
@@ -92,10 +95,10 @@ public class SpellCastHandler {
                 // No animation
                 break;
             case "Uppercut":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.UPWARD_SLASH_ANIMATION, WynnanimatedClient.UPWARD_SLASH_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.UP_SLASH_ANIMATION, WynnanimatedClient.UP_SLASH_SPEED);
                 break;
             case "War Scream":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.GROUND_CLEAVE_ANIMATION, WynnanimatedClient.GROUND_CLEAVE_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BATTLECRY_ANIMATION, WynnanimatedClient.BATTLECRY_SPEED);
                 break;
 
             case "Arrow Storm":
@@ -105,7 +108,7 @@ public class SpellCastHandler {
                 // No animation
                 break;
             case "Arrow Bomb":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_ANIMATION, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_ANIMATION, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_SLOW_SPEED);
                 break;
             case "Arrow Shield":
                 // No animation
@@ -118,41 +121,82 @@ public class SpellCastHandler {
 
     public static void performAttackAnimation() {
         if (!WynnanimatedClient.isWynntilsLoaded()) return;
+
         AbstractClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player == null) return;
+
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) return;
 
         String wynnClass = WynntilsCompat.getPlayerClass();
         if (wynnClass == null || HelperMethods.isMainHandOnCooldown(player)) return;
+
+        float attackSpeed = computeAttackSpeedMultiplier(stack);
 
         System.out.println("Performing attack animation for " + wynnClass);
         switch (wynnClass) {
             case "Archer/Hunter" -> WynnanimatedClient.playAnimation(
                     player,
                     WynnanimatedClient.RAPIDFIRE_HORIZONTAL_ANIMATION,
-                    WynnanimatedClient.RAPIDFIRE_HORIZONTAL_SPEED
+                    speed(WynnanimatedClient.RAPIDFIRE_HORIZONTAL_SPEED, attackSpeed)
             );
             case "Warrior/Knight" -> WynnanimatedClient.playAnimation(
                     player,
-                    WynnanimatedClient.SLASH_RIGHT_ANIMATION,
-                    WynnanimatedClient.SLASH_RIGHT_SPEED
+                    WynnanimatedClient.SWING_ANIMATION,
+                    speed(WynnanimatedClient.SWING_SPEED, attackSpeed)
             );
             case "Mage/Dark Wizard" -> WynnanimatedClient.playAnimation(
                     player,
                     WynnanimatedClient.SLASH_LEFT_ANIMATION,
-                    WynnanimatedClient.SLASH_LEFT_SPEED
+                    speed(WynnanimatedClient.SLASH_LEFT_SPEED, attackSpeed)
             );
             case "Assasin/Ninja" -> WynnanimatedClient.playAnimation(
                     player,
                     WynnanimatedClient.SLASH_RIGHT_ANIMATION,
-                    WynnanimatedClient.SLASH_RIGHT_SPEED
+                    speed(WynnanimatedClient.SLASH_RIGHT_SPEED, attackSpeed)
             );
-            case "Shaman/Skyseer" -> WynnanimatedClient.playAnimation(
+            case "Shaman/Skyseer" -> {
+                WynnanimatedClient.playAnimation(
                     player,
                     WynnanimatedClient.THROW_ANIMATION,
-                    WynnanimatedClient.THROW_SPEED
+                    speed(WynnanimatedClient.THROW_SHAMAN_SPEED, attackSpeed)
             );
+                System.out.println("Animation speed is: " + speed(WynnanimatedClient.THROW_SHAMAN_SPEED, attackSpeed).speed);
+            }
 
         }
 
+    }
+
+
+    private static SpeedModifier speed(float baseSpeed, float multiplier) {
+        return new SpeedModifier(baseSpeed * multiplier);
+    }
+
+    private static float computeAttackSpeedMultiplier(ItemStack stack) {
+        int cooldownTicks = WynnAttackSpeedResolver.resolveCooldownFromLore(stack);
+
+        if (cooldownTicks < 0) {
+            cooldownTicks = WynnCooldownCache.get(stack);
+        }
+
+        if (cooldownTicks < 0) {
+            cooldownTicks = 15; // safe fallback
+        }
+
+        float vanilla = 25f;
+
+        System.out.println("Speed compute result = " + MathHelper.clamp(
+                vanilla / cooldownTicks,
+                0.6f,
+                1.6f
+        ));
+
+        return MathHelper.clamp(
+                vanilla / cooldownTicks,
+                0.6f,
+                1.6f
+        );
     }
 
 
