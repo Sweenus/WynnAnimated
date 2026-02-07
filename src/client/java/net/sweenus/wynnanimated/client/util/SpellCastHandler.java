@@ -172,24 +172,32 @@ public class SpellCastHandler {
         return (baseSpeed * multiplier);
     }
 
+    private static boolean useCooldownObserver = true; // false = use lore resolver, true = use cooldown observer
     private static float computeAttackSpeedMultiplier(ItemStack stack) {
-        int cooldownTicks = WynnAttackSpeedResolver.resolveCooldownFromLore(stack);
+        int cooldownTicks;
 
-        if (cooldownTicks < 0) {
+        if (useCooldownObserver) {
+            // Use observer-based method
             cooldownTicks = WynnCooldownCache.get(stack);
+            System.out.println("Using cooldown observer: " + cooldownTicks + " ticks");
+        } else {
+            // Use lore-based method (with fallback to observer)
+            cooldownTicks = WynnAttackSpeedResolver.resolveCooldownFromLore(stack);
+
+            if (cooldownTicks < 0) {
+                cooldownTicks = WynnCooldownCache.get(stack);
+                System.out.println("Lore resolver failed, falling back to cache: " + cooldownTicks + " ticks");
+            } else {
+                System.out.println("Using lore resolver: " + cooldownTicks + " ticks");
+            }
         }
 
         if (cooldownTicks < 0) {
             cooldownTicks = 15; // safe fallback
+            System.out.println("Both methods failed, using fallback: " + cooldownTicks + " ticks");
         }
 
         float vanilla = 25f;
-
-        System.out.println("Speed compute result = " + MathHelper.clamp(
-                vanilla / cooldownTicks,
-                0.6f,
-                1.6f
-        ));
 
         return MathHelper.clamp(
                 vanilla / cooldownTicks,

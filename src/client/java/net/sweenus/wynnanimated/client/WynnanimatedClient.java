@@ -13,9 +13,11 @@ import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.sweenus.wynnanimated.client.util.WynnCooldownObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +36,6 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final float SPIN_LONG_SPEED = 2.5f;
     public static final Identifier THROW_ANIMATION = Identifier.of(MOD_ID, "throw");
     public static final float THROW_SPEED = 1.9f;
-    public static final float THROW_SHAMAN_SPEED = 1.0f;
     public static final Identifier RANGED_SLASH_ANIMATION = Identifier.of(MOD_ID, "ranged_slash");
     public static final float RANGED_SLASH_SPEED = 2.1f;
     public static final Identifier SLAM_ANIMATION = Identifier.of(MOD_ID, "two_handed_slam");
@@ -55,7 +56,8 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
     public static final float SLASH_LEFT_SPEED = 1.0f;
     public static final Identifier SWING_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing");
-    public static final float SWING_SPEED = 1.0f;
+    public static final float SWING_SPEED = 0.8f;
+    public static final float THROW_SHAMAN_SPEED = 1.2f;
 
 
     public static final Identifier TEST_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing");
@@ -71,6 +73,13 @@ public class WynnanimatedClient implements ClientModInitializer {
         registerAnimations();
         setFirstPersonConfiguration();
         createLists();
+
+        // Track cooldowns for basic attack animation speed
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (client.player instanceof AbstractClientPlayerEntity player) {
+                WynnCooldownObserver.tick(player);
+            }
+        });
     }
 
     public static void setFirstPersonConfiguration() {
@@ -143,7 +152,7 @@ public class WynnanimatedClient implements ClientModInitializer {
                 speedModifiers.put(selectedAnimation, speedMod);
             } else {
                 // Update the existing modifier's speed
-                speedMod.speed = speedValue;  // Assuming SpeedModifier has a public speed field
+                speedMod.speed = speedValue;
                 System.out.println("Updated existing animation speed modifier to " + speedMod.speed);
             }
 
