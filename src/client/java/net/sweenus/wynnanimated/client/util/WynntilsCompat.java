@@ -1,0 +1,42 @@
+package net.sweenus.wynnanimated.client.util;
+
+import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+public final class WynntilsCompat {
+
+    private static Method getClassTypeMethod;
+    private static Object characterModel;
+
+    public static @Nullable String getPlayerClass() {
+        if (!WynnanimatedClient.isWynntilsLoaded()) return null;
+
+        //System.out.println("fetching Wynntils class");
+        try {
+            // Load Models class
+            Class<?> modelsClass =
+                    Class.forName("com.wynntils.core.components.Models");
+
+            // Models.Character
+            Field characterField = modelsClass.getField("Character");
+            Object character = characterField.get(null);
+
+            // Cache method lookup
+            if (getClassTypeMethod == null) {
+                getClassTypeMethod =
+                        character.getClass().getMethod("getClassType");
+                characterModel = character;
+            }
+
+            Object classTypeEnum = getClassTypeMethod.invoke(characterModel);
+
+            //System.out.println("Class found: " + classTypeEnum.toString());
+            return classTypeEnum != null ? classTypeEnum.toString() : null;
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+}

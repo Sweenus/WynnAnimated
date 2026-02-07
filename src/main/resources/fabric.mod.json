@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "wynnanimated",
+  "version": "${version}",
+  "name": "WynnAnimated",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/wynnanimated/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      "net.sweenus.wynnanimated.client.WynnanimatedDataGenerator"
+    ],
+    "client": [
+      "net.sweenus.wynnanimated.client.WynnanimatedClient"
+    ],
+    "main": [
+      "net.sweenus.wynnanimated.Wynnanimated"
+    ]
+  },
+  "mixins": [
+    "wynnanimated.mixins.json",
+    {
+      "config": "wynnanimated.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
