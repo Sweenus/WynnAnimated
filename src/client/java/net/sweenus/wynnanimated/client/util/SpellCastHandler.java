@@ -119,17 +119,17 @@ public class SpellCastHandler {
 
     }
 
-    public static void performAttackAnimation() {
-        if (!WynnanimatedClient.isWynntilsLoaded()) return;
+    public static boolean performAttackAnimation() {
+        if (!WynnanimatedClient.isWynntilsLoaded()) return false;
 
         AbstractClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) return;
+        if (player == null) return false;
 
         ItemStack stack = player.getMainHandStack();
-        if (stack.isEmpty()) return;
+        if (stack.isEmpty()) return false;
 
         String wynnClass = WynntilsCompat.getPlayerClass();
-        if (wynnClass == null || HelperMethods.isMainHandOnCooldown(player)) return;
+        if (wynnClass == null || HelperMethods.isMainHandOnCooldown(player)) return false;
 
         float attackSpeed = computeAttackSpeedMultiplier(stack);
 
@@ -162,9 +162,11 @@ public class SpellCastHandler {
                     speed(WynnanimatedClient.THROW_SHAMAN_SPEED, attackSpeed)
             );
             }
-
+            default -> {
+                return false;
+            }
         }
-
+        return true;
     }
 
 

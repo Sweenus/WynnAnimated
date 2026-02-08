@@ -17,6 +17,11 @@ public abstract class AbstractClientPlayerMixin {
     @Unique
     AbstractClientPlayerEntity player = (AbstractClientPlayerEntity) (Object) this;
 
+    @Unique
+    private boolean wasHandSwinging = false;
+    @Unique
+    private int lastHandSwingTicks = 0;
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void wynnanimated$tick(CallbackInfo ci) {
 
@@ -27,12 +32,24 @@ public abstract class AbstractClientPlayerMixin {
                 WynnanimatedClient.playAnimation(player, WynnanimatedClient.TEST_ANIMATION, WynnanimatedClient.TEST_SPEED);
             });
 
-        if (!WynnanimatedClient.isPlayingAnyAnimation(player, WynnanimatedClient.basicAttackList)) {
-            if (player.handSwinging && player.handSwingProgress < 0.25f) {
-                SpellCastHandler.performAttackAnimation();
-            } else if (player.isUsingItem()){
-                SpellCastHandler.performAttackAnimation();
+        // Detect the start of a new swing rather than polling handSwingProgress
+        // Only count swings where the player is actually pressing the attack key,
+        // to filter out server-triggered swing animations from Wynncraft
+        boolean attackKeyPressed = MinecraftClient.getInstance().options.attackKey.isPressed();
+        boolean isNewSwing = attackKeyPressed
+                && ((player.handSwinging && !wasHandSwinging)
+                || (player.handSwinging && player.handSwingTicks < lastHandSwingTicks));
+        wasHandSwinging = player.handSwinging;
+        lastHandSwingTicks = player.handSwingTicks;
+
+        if (isNewSwing) {
+            if (SpellCastHandler.performAttackAnimation()) {
+                // Suppress vanilla hand swing when custom animation is playing
+                player.handSwinging = false;
             }
+        } else if (!WynnanimatedClient.isPlayingAnyAnimation(player, WynnanimatedClient.basicAttackList)
+                && player.isUsingItem()) {
+            SpellCastHandler.performAttackAnimation();
         }
 
 
