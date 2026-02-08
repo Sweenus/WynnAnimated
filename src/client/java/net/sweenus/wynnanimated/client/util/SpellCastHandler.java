@@ -1,10 +1,11 @@
 package net.sweenus.wynnanimated.client.util;
 
-import dev.kosmx.playerAnim.api.layered.modifier.SpeedModifier;
+import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
+import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Identifier;
 import net.sweenus.wynnanimated.client.WynnanimatedClient;
 
 public class SpellCastHandler {
@@ -119,6 +120,15 @@ public class SpellCastHandler {
 
     }
 
+    // Attack animation pacing state
+    private static Identifier activeAttackAnimId = null;
+    private static int animStartTick = -1;
+    private static int normalPhaseTicks = 0;
+    private static float slowPhaseSpeed = 1.0f;
+    private static int totalPacingTicks = 0;
+    private static final float NORMAL_SPEED_PORTION = 0.8f;
+    private static final int EARLY_COOLDOWN_THRESHOLD = 4;
+
     public static boolean performAttackAnimation() {
         if (!WynnanimatedClient.isWynntilsLoaded()) return false;
 
@@ -129,61 +139,87 @@ public class SpellCastHandler {
         if (stack.isEmpty()) return false;
 
         String wynnClass = WynntilsCompat.getPlayerClass();
-        if (wynnClass == null || HelperMethods.isMainHandOnCooldown(player)) return false;
+        if (wynnClass == null) return false;
 
-        float attackSpeed = computeAttackSpeedMultiplier(stack);
+        int cooldownTicks = resolveCooldownTicks(stack);
 
-        System.out.println("Performing attack animation for " + wynnClass);
-        switch (wynnClass) {
-            case "Archer/Hunter" -> WynnanimatedClient.playAnimation(
-                    player,
-                    WynnanimatedClient.RAPIDFIRE_HORIZONTAL_ANIMATION,
-                    speed(WynnanimatedClient.RAPIDFIRE_HORIZONTAL_SPEED, attackSpeed)
-            );
-            case "Warrior/Knight" -> WynnanimatedClient.playAnimation(
-                    player,
-                    WynnanimatedClient.SWING_ANIMATION,
-                    speed(WynnanimatedClient.SWING_SPEED, attackSpeed)
-            );
-            case "Mage/Dark Wizard" -> WynnanimatedClient.playAnimation(
-                    player,
-                    WynnanimatedClient.SLASH_LEFT_ANIMATION,
-                    speed(WynnanimatedClient.SLASH_LEFT_SPEED, attackSpeed)
-            );
-            case "Assasin/Ninja" -> WynnanimatedClient.playAnimation(
-                    player,
-                    WynnanimatedClient.SLASH_RIGHT_ANIMATION,
-                    speed(WynnanimatedClient.SLASH_RIGHT_SPEED, attackSpeed)
-            );
-            case "Shaman/Skyseer" -> {
-                WynnanimatedClient.playAnimation(
-                    player,
-                    WynnanimatedClient.THROW_ANIMATION,
-                    speed(WynnanimatedClient.THROW_SHAMAN_SPEED, attackSpeed)
-            );
-            }
-            default -> {
-                return false;
-            }
+        // Only play if we're in the first few ticks of the cooldown (or no cooldown active)
+        if (player.getItemCooldownManager().isCoolingDown(stack)) {
+            float progress = player.getItemCooldownManager().getCooldownProgress(stack, 0);
+            int elapsedTicks = Math.round((1.0f - progress) * cooldownTicks);
+            if (elapsedTicks > EARLY_COOLDOWN_THRESHOLD) return false;
         }
+        System.out.println("class is: " + wynnClass);
+
+        Identifier animId = switch (wynnClass) {
+            case "Archer/Hunter" -> WynnanimatedClient.RAPIDFIRE_HORIZONTAL_ANIMATION;
+            case "Warrior/Knight" -> WynnanimatedClient.SWING_ANIMATION;
+            case "Mage/Dark Wizard" -> WynnanimatedClient.SLASH_LEFT_ANIMATION;
+            case "Assassin/Ninja" -> WynnanimatedClient.RANGED_SLASH_ANIMATION;
+            case "Shaman/Skyseer" -> WynnanimatedClient.THROW_ANIMATION;
+            default -> null;
+        };
+        if (animId == null) return false;
+
+        // Get animation's full duration (stopTick, not endTick, to include the return-to-rest phase)
+        KeyframeAnimation anim = (KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animId);
+        int animDuration = (anim != null) ? anim.getLength() : 0;
+
+        AttackTracker.lastAnimationTick = player.age;
+
+        if (animDuration > 0 && animDuration > cooldownTicks) {
+            // Animation is longer than cooldown - uniform speedup to fit
+            float speed = (float) animDuration / cooldownTicks;
+            WynnanimatedClient.playAnimation(player, animId, speed);
+            activeAttackAnimId = null;
+            System.out.println("Performing attack animation for " + wynnClass
+                    + " | duration: " + animDuration + ", cooldown: " + cooldownTicks + ", speed: " + speed);
+        } else if (animDuration > 0 && animDuration < cooldownTicks) {
+            // Animation is shorter than cooldown - normal speed then slow tail
+            WynnanimatedClient.playAnimation(player, animId, 1.0f);
+            activeAttackAnimId = animId;
+            animStartTick = player.age;
+            normalPhaseTicks = (int) (animDuration * NORMAL_SPEED_PORTION);
+            int tailAnimTicks = animDuration - normalPhaseTicks;
+            int tailGameTicks = cooldownTicks - normalPhaseTicks;
+            slowPhaseSpeed = (float) tailAnimTicks / tailGameTicks;
+            totalPacingTicks = cooldownTicks;
+            System.out.println("Performing attack animation for " + wynnClass
+                    + " | duration: " + animDuration + ", cooldown: " + cooldownTicks
+                    + ", normalPhase: " + normalPhaseTicks + " ticks, slowPhase speed: " + slowPhaseSpeed);
+        } else {
+            // Animation matches cooldown exactly (or duration unknown) - play at normal speed
+            WynnanimatedClient.playAnimation(player, animId, 1.0f);
+            activeAttackAnimId = null;
+            System.out.println("Performing attack animation for " + wynnClass
+                    + " | duration: " + animDuration + ", cooldown: " + cooldownTicks + ", speed: 1.0");
+        }
+
         return true;
     }
 
+    public static void tickAttackAnimationSpeed(AbstractClientPlayerEntity player) {
+        if (activeAttackAnimId == null) return;
 
-    private static float speed(float baseSpeed, float multiplier) {
-        return (baseSpeed * multiplier);
+        int elapsed = player.age - animStartTick;
+
+        if (elapsed >= totalPacingTicks) {
+            activeAttackAnimId = null;
+            return;
+        }
+
+        float speed = (elapsed <= normalPhaseTicks) ? 1.0f : slowPhaseSpeed;
+        WynnanimatedClient.updateAnimationSpeed(activeAttackAnimId, speed);
     }
 
     private static boolean useCooldownObserver = true; // false = use lore resolver, true = use cooldown observer
-    private static float computeAttackSpeedMultiplier(ItemStack stack) {
+    private static int resolveCooldownTicks(ItemStack stack) {
         int cooldownTicks;
 
         if (useCooldownObserver) {
-            // Use observer-based method
             cooldownTicks = WynnCooldownCache.get(stack);
             System.out.println("Using cooldown observer: " + cooldownTicks + " ticks");
         } else {
-            // Use lore-based method (with fallback to observer)
             cooldownTicks = WynnAttackSpeedResolver.resolveCooldownFromLore(stack);
 
             if (cooldownTicks < 0) {
@@ -199,13 +235,7 @@ public class SpellCastHandler {
             System.out.println("Both methods failed, using fallback: " + cooldownTicks + " ticks");
         }
 
-        float vanilla = 25f;
-
-        return MathHelper.clamp(
-                vanilla / cooldownTicks,
-                0.6f,
-                1.6f
-        );
+        return cooldownTicks;
     }
 
 

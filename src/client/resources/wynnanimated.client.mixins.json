@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "AbstractClientPlayerMixin",
+    "LivingEntityMixin",
+    "MinecraftClientMixin",
     "SpellModelMixin",
     "AutoAttackFeatureMixin"
   ],

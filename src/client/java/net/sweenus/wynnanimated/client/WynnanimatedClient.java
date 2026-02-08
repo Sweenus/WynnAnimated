@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class WynnanimatedClient implements ClientModInitializer {
@@ -55,8 +54,8 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final float SLASH_RIGHT_SPEED = 1.0f;
     public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
     public static final float SLASH_LEFT_SPEED = 1.0f;
-    public static final Identifier SWING_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing");
-    public static final float SWING_SPEED = 0.8f;
+    public static final Identifier SWING_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing_alt");
+    public static final float SWING_SPEED = 1.0f;
     public static final float THROW_SHAMAN_SPEED = 1.2f;
 
 
@@ -131,6 +130,8 @@ public class WynnanimatedClient implements ClientModInitializer {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BATTLECRY_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SWING_ANIMATION, 9,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TEST_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
@@ -165,6 +166,13 @@ public class WynnanimatedClient implements ClientModInitializer {
         }
     }
 
+    public static void updateAnimationSpeed(Identifier animationId, float speedValue) {
+        SpeedModifier speedMod = speedModifiers.get(animationId);
+        if (speedMod != null) {
+            speedMod.speed = speedValue;
+        }
+    }
+
     public static void stopAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation) {
         var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
         if (animation == null) return;
@@ -175,7 +183,8 @@ public class WynnanimatedClient implements ClientModInitializer {
     }
 
     public static boolean isPlayingCustomAnimation(AbstractClientPlayerEntity player, Identifier animation) {
-        return Objects.requireNonNull(PlayerAnimationAccess.getPlayerAssociatedData(player).get(animation)).isActive();
+        var anim = PlayerAnimationAccess.getPlayerAssociatedData(player).get(animation);
+        return anim != null && anim.isActive();
     }
 
     public static void createLists() {
@@ -187,13 +196,11 @@ public class WynnanimatedClient implements ClientModInitializer {
     }
 
     public static boolean isPlayingAnyAnimation(AbstractClientPlayerEntity player, List<Identifier> list) {
-        AtomicBoolean inUse = new AtomicBoolean(false);
-        list.forEach(identifier -> {
-            if (Objects.requireNonNull(PlayerAnimationAccess.getPlayerAssociatedData(player).get(identifier)).isActive())
-                inUse.set(true);
-        });
-
-        return inUse.get();
+        for (Identifier identifier : list) {
+            var anim = PlayerAnimationAccess.getPlayerAssociatedData(player).get(identifier);
+            if (anim != null && anim.isActive()) return true;
+        }
+        return false;
     }
 
 
