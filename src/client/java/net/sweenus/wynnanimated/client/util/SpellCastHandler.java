@@ -103,13 +103,13 @@ public class SpellCastHandler {
                 break;
 
             case "Arrow Storm":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_ANIMATION, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_SLOW_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_LONG_ANIMATION, WynnanimatedClient.BOW_SHOOT_HORIZONTAL_SPEED);
                 break;
             case "Escape":
                 // No animation
                 break;
             case "Arrow Bomb":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_ANIMATION, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_SLOW_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BOW_SHOOT_ANIMATION, WynnanimatedClient.BOW_SHOOT_HORIZONTAL_SPEED);
                 break;
             case "Arrow Shield":
                 // No animation
@@ -152,7 +152,7 @@ public class SpellCastHandler {
         System.out.println("class is: " + wynnClass);
 
         Identifier animId = switch (wynnClass) {
-            case "Archer/Hunter" -> WynnanimatedClient.RAPIDFIRE_HORIZONTAL_ANIMATION;
+            case "Archer/Hunter" -> WynnanimatedClient.BOW_SHOOT_ANIMATION;
             case "Warrior/Knight" -> WynnanimatedClient.SWING_ANIMATION;
             case "Mage/Dark Wizard" -> WynnanimatedClient.SLASH_LEFT_ANIMATION;
             case "Assassin/Ninja" -> WynnanimatedClient.RANGED_SLASH_ANIMATION;

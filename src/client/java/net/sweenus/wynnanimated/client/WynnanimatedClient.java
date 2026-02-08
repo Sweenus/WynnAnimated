@@ -47,9 +47,9 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final float BATTLECRY_SPEED = 1.5f;
 
 
-    public static final Identifier RAPIDFIRE_HORIZONTAL_ANIMATION = Identifier.of(MOD_ID, "rapidfire_horizontal");
-    public static final float RAPIDFIRE_HORIZONTAL_SPEED = 1.0f;
-    public static final float RAPIDFIRE_HORIZONTAL_SLOW_SPEED = 2.1f;
+    public static final Identifier BOW_SHOOT_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_horizontal");
+    public static final Identifier RAPIDFIRE_HORIZONTAL_LONG_ANIMATION = Identifier.of(MOD_ID, "rapidfire_horizontal_long");
+    public static final float BOW_SHOOT_HORIZONTAL_SPEED = 1.2f;
     public static final Identifier SLASH_RIGHT_ANIMATION = Identifier.of(MOD_ID, "slash_right");
     public static final float SLASH_RIGHT_SPEED = 1.0f;
     public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
@@ -118,7 +118,10 @@ public class WynnanimatedClient implements ClientModInitializer {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(GROUND_CLEAVE_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(RAPIDFIRE_HORIZONTAL_ANIMATION, 9,
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_SHOOT_ANIMATION, 9,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(RAPIDFIRE_HORIZONTAL_LONG_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SLASH_RIGHT_ANIMATION, 9,
@@ -189,7 +192,7 @@ public class WynnanimatedClient implements ClientModInitializer {
 
     public static void createLists() {
         basicAttackList.add(SWING_ANIMATION);
-        basicAttackList.add(RAPIDFIRE_HORIZONTAL_ANIMATION);
+        basicAttackList.add(BOW_SHOOT_ANIMATION);
         basicAttackList.add(SLASH_LEFT_ANIMATION);
         basicAttackList.add(SLASH_RIGHT_ANIMATION);
         basicAttackList.add(THROW_ANIMATION);
