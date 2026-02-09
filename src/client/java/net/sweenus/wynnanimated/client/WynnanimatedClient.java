@@ -57,6 +57,7 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final Identifier SWING_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing_alt");
     public static final float SWING_SPEED = 1.0f;
     public static final float THROW_SHAMAN_SPEED = 1.2f;
+    public static final Identifier ROGUE_SLASH_ANIMATION = Identifier.of(MOD_ID, "rogue_slash");
 
 
     public static final Identifier TEST_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing");
@@ -137,6 +138,9 @@ public class WynnanimatedClient implements ClientModInitializer {
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TEST_ANIMATION, 10,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ROGUE_SLASH_ANIMATION, 9,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         System.out.println("Registered WynnAnimated animations");

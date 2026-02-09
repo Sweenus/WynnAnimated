@@ -128,6 +128,7 @@ public class SpellCastHandler {
     private static int totalPacingTicks = 0;
     private static final float NORMAL_SPEED_PORTION = 0.8f;
     private static final int EARLY_COOLDOWN_THRESHOLD = 4;
+    private static final float MAX_ANIMATION_SPEED = 3.0f;
 
     public static boolean performAttackAnimation() {
         if (!WynnanimatedClient.isWynntilsLoaded()) return false;
@@ -155,11 +156,14 @@ public class SpellCastHandler {
             case "Archer/Hunter" -> WynnanimatedClient.BOW_SHOOT_ANIMATION;
             case "Warrior/Knight" -> WynnanimatedClient.SWING_ANIMATION;
             case "Mage/Dark Wizard" -> WynnanimatedClient.SLASH_LEFT_ANIMATION;
-            case "Assassin/Ninja" -> WynnanimatedClient.RANGED_SLASH_ANIMATION;
+            case "Assassin/Ninja" -> WynnanimatedClient.ROGUE_SLASH_ANIMATION;
             case "Shaman/Skyseer" -> WynnanimatedClient.THROW_ANIMATION;
             default -> null;
         };
         if (animId == null) return false;
+
+        // Don't restart if this animation is already playing (prevents stutter on fast cooldown weapons)
+        if (WynnanimatedClient.isPlayingCustomAnimation(player, animId)) return true;
 
         // Get animation's full duration (stopTick, not endTick, to include the return-to-rest phase)
         KeyframeAnimation anim = (KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animId);
@@ -169,7 +173,7 @@ public class SpellCastHandler {
 
         if (animDuration > 0 && animDuration > cooldownTicks) {
             // Animation is longer than cooldown - uniform speedup to fit
-            float speed = (float) animDuration / cooldownTicks;
+            float speed = Math.min((float) animDuration / cooldownTicks, MAX_ANIMATION_SPEED);
             WynnanimatedClient.playAnimation(player, animId, speed);
             activeAttackAnimId = null;
             System.out.println("Performing attack animation for " + wynnClass
