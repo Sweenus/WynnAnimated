@@ -2,6 +2,7 @@ package net.sweenus.wynnanimated.client.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import net.sweenus.wynnanimated.client.WynnanimatedClient;
 import net.sweenus.wynnanimated.client.util.AttackTracker;
 import net.sweenus.wynnanimated.client.util.SpellCastHandler;
@@ -54,7 +55,11 @@ public abstract class AbstractClientPlayerMixin {
         // Update attack animation speed pacing (normal speed -> slow tail)
         SpellCastHandler.tickAttackAnimationSpeed(player);
 
-
+        // Smoothly align body toward camera direction during animations so first-person arms track correctly
+        if (player.age - WynnanimatedClient.lastAnimationPlayedTick < AttackTracker.SWING_SUPPRESS_TICKS) {
+            float diff = MathHelper.wrapDegrees(player.getYaw() - player.bodyYaw);
+            player.bodyYaw += diff * 0.9f;
+        }
     }
 
 }

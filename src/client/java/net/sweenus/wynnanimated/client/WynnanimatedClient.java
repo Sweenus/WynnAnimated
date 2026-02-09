@@ -184,6 +184,7 @@ public class WynnanimatedClient implements ClientModInitializer {
 
     private static final Map<Identifier, SpeedModifier> speedModifiers = new HashMap<>();
     private static AbstractClientPlayerEntity lastAnimPlayer = null;
+    public static int lastAnimationPlayedTick = Integer.MIN_VALUE;
 
     public static void playAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation, float speedValue) {
         var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
@@ -206,6 +207,8 @@ public class WynnanimatedClient implements ClientModInitializer {
                 speedMod.speed = speedValue;
                 if (debugMode) System.out.println("Updated existing animation speed modifier to " + speedMod.speed);
             }
+
+            lastAnimationPlayedTick = player.age;
 
             animation.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(2, Ease.INOUTSINE),
                     new KeyframeAnimationPlayer((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(selectedAnimation))
