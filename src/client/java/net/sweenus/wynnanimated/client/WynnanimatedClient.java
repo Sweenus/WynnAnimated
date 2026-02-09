@@ -45,6 +45,8 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final float GROUND_CLEAVE_SPEED = 2.1f;
     public static final Identifier BATTLECRY_ANIMATION = Identifier.of(MOD_ID, "battlecry");
     public static final float BATTLECRY_SPEED = 1.5f;
+    public static final Identifier UPPERCUT_ANIMATION = Identifier.of(MOD_ID, "uppercut");
+    public static final float UPPERCUT_SPEED = 1.8f;
     public static final Identifier SPELL_CAST_ANIMATION = Identifier.of(MOD_ID, "spell_cast");
     public static final float SPELL_CAST_SPEED = 1.0f;
     public static final Identifier SPELL_CAST_ALT_ANIMATION = Identifier.of(MOD_ID, "spell_cast_alt");
@@ -171,6 +173,9 @@ public class WynnanimatedClient implements ClientModInitializer {
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_AURA_ANIMATION, 10,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPPERCUT_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         System.out.println("Registered WynnAnimated animations");

@@ -96,7 +96,7 @@ public class SpellCastHandler {
                 WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
                 break;
             case "Uppercut":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.UP_SLASH_ANIMATION, WynnanimatedClient.UP_SLASH_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.UPPERCUT_ANIMATION, WynnanimatedClient.UPPERCUT_SPEED);
                 break;
             case "War Scream":
                 WynnanimatedClient.playAnimation(player, WynnanimatedClient.BATTLECRY_ANIMATION, WynnanimatedClient.BATTLECRY_SPEED);
