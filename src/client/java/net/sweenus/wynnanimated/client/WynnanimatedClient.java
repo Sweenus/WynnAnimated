@@ -79,7 +79,7 @@ public class WynnanimatedClient implements ClientModInitializer {
 
     public static List<Identifier> basicAttackList = new ArrayList<>();
 
-    public static boolean debugMode = false;
+    public static boolean debugMode = true;
     public static boolean shouldShowArms = true; // Make this configurable later
     public static final FirstPersonConfiguration firstPersonConfiguration = new FirstPersonConfiguration();
 
@@ -161,7 +161,7 @@ public class WynnanimatedClient implements ClientModInitializer {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ROGUE_SLASH_ANIMATION, 9,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_CAST_ANIMATION, 10,
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_CAST_ANIMATION, 9,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_CAST_ALT_ANIMATION, 10,
@@ -183,14 +183,21 @@ public class WynnanimatedClient implements ClientModInitializer {
     }
 
     private static final Map<Identifier, SpeedModifier> speedModifiers = new HashMap<>();
+    private static AbstractClientPlayerEntity lastAnimPlayer = null;
 
     public static void playAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation, float speedValue) {
         var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
         if (animation != null) {
+            // Clear cached modifiers if the player entity changed (respawn, dimension change, etc.)
+            if (player != lastAnimPlayer) {
+                speedModifiers.clear();
+                lastAnimPlayer = player;
+            }
+
             SpeedModifier speedMod = speedModifiers.get(selectedAnimation);
 
             if (speedMod == null) {
-                // First time - create and add the modifier
+                // First time (or after player entity change) - create and add the modifier
                 speedMod = new SpeedModifier(speedValue);
                 animation.addModifier(speedMod, 0);
                 speedModifiers.put(selectedAnimation, speedMod);
