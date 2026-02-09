@@ -103,7 +103,7 @@ public class SpellCastHandler {
                 break;
 
             case "Arrow Storm":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.RAPIDFIRE_HORIZONTAL_LONG_ANIMATION, WynnanimatedClient.BOW_SHOOT_HORIZONTAL_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BOW_RAPIDFIRE_VERTICAL_ANIMATION, WynnanimatedClient.BOW_RAPIDFIRE_VERTICAL_SPEED);
                 break;
             case "Escape":
                 // No animation
@@ -113,6 +113,19 @@ public class SpellCastHandler {
                 break;
             case "Arrow Shield":
                 // No animation
+                break;
+
+            case "Heal":
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
+                break;
+            case "Teleport":
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
+                break;
+            case "Meteor":
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ALT_ANIMATION, WynnanimatedClient.SPELL_CAST_ALT_SPEED);
+                break;
+            case "Ice Snake":
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_ICE_SNAKE_ANIMATION, WynnanimatedClient.SPELL_ICE_SNAKE_SPEED);
                 break;
             default:
                 System.out.println("Unknown animation type: " + spellName);
@@ -128,7 +141,7 @@ public class SpellCastHandler {
     private static int totalPacingTicks = 0;
     private static final float NORMAL_SPEED_PORTION = 0.8f;
     private static final int EARLY_COOLDOWN_THRESHOLD = 4;
-    private static final float MAX_ANIMATION_SPEED = 3.0f;
+    private static final float MAX_ANIMATION_SPEED = 5.0f;
 
     public static boolean performAttackAnimation() {
         if (!WynnanimatedClient.isWynntilsLoaded()) return false;
@@ -153,9 +166,9 @@ public class SpellCastHandler {
         System.out.println("class is: " + wynnClass);
 
         Identifier animId = switch (wynnClass) {
-            case "Archer/Hunter" -> WynnanimatedClient.BOW_SHOOT_ANIMATION;
+            case "Archer/Hunter" -> WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
             case "Warrior/Knight" -> WynnanimatedClient.SWING_ANIMATION;
-            case "Mage/Dark Wizard" -> WynnanimatedClient.SLASH_LEFT_ANIMATION;
+            case "Mage/Dark Wizard" -> WynnanimatedClient.SPELL_CAST_ANIMATION;
             case "Assassin/Ninja" -> WynnanimatedClient.ROGUE_SLASH_ANIMATION;
             case "Shaman/Skyseer" -> WynnanimatedClient.THROW_ANIMATION;
             default -> null;

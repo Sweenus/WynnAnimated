@@ -45,11 +45,19 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final float GROUND_CLEAVE_SPEED = 2.1f;
     public static final Identifier BATTLECRY_ANIMATION = Identifier.of(MOD_ID, "battlecry");
     public static final float BATTLECRY_SPEED = 1.5f;
+    public static final Identifier SPELL_CAST_ANIMATION = Identifier.of(MOD_ID, "spell_cast");
+    public static final float SPELL_CAST_SPEED = 1.0f;
+    public static final Identifier SPELL_CAST_ALT_ANIMATION = Identifier.of(MOD_ID, "spell_cast_alt");
+    public static final float SPELL_CAST_ALT_SPEED = 1.6f;
+    public static final Identifier SPELL_ICE_SNAKE_ANIMATION = Identifier.of(MOD_ID, "spell_ice_snake");
+    public static final float SPELL_ICE_SNAKE_SPEED = 1.1f;
 
 
     public static final Identifier BOW_SHOOT_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_horizontal");
-    public static final Identifier RAPIDFIRE_HORIZONTAL_LONG_ANIMATION = Identifier.of(MOD_ID, "rapidfire_horizontal_long");
+    public static final Identifier BOW_RAPIDFIRE_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_rapidfire_vertical");
+    public static final float BOW_RAPIDFIRE_VERTICAL_SPEED = 2.2f;
     public static final float BOW_SHOOT_HORIZONTAL_SPEED = 1.2f;
+    public static final Identifier BOW_SHOOT_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_vertical");
     public static final Identifier SLASH_RIGHT_ANIMATION = Identifier.of(MOD_ID, "slash_right");
     public static final float SLASH_RIGHT_SPEED = 1.0f;
     public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
@@ -122,7 +130,10 @@ public class WynnanimatedClient implements ClientModInitializer {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_SHOOT_ANIMATION, 9,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(RAPIDFIRE_HORIZONTAL_LONG_ANIMATION, 10,
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_RAPIDFIRE_VERTICAL_ANIMATION, 10,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_SHOOT_VERTICAL_ANIMATION, 9,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SLASH_RIGHT_ANIMATION, 9,
@@ -141,6 +152,15 @@ public class WynnanimatedClient implements ClientModInitializer {
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ROGUE_SLASH_ANIMATION, 9,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_CAST_ANIMATION, 10,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_CAST_ALT_ANIMATION, 10,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_ICE_SNAKE_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         System.out.println("Registered WynnAnimated animations");
