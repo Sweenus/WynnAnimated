@@ -79,6 +79,7 @@ public class WynnanimatedClient implements ClientModInitializer {
 
     public static List<Identifier> basicAttackList = new ArrayList<>();
 
+    public static boolean debugMode = false;
     public static boolean shouldShowArms = true; // Make this configurable later
     public static final FirstPersonConfiguration firstPersonConfiguration = new FirstPersonConfiguration();
 
@@ -178,7 +179,7 @@ public class WynnanimatedClient implements ClientModInitializer {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPPERCUT_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
-        System.out.println("Registered WynnAnimated animations");
+        if (debugMode) System.out.println("Registered WynnAnimated animations");
     }
 
     private static final Map<Identifier, SpeedModifier> speedModifiers = new HashMap<>();
@@ -196,7 +197,7 @@ public class WynnanimatedClient implements ClientModInitializer {
             } else {
                 // Update the existing modifier's speed
                 speedMod.speed = speedValue;
-                System.out.println("Updated existing animation speed modifier to " + speedMod.speed);
+                if (debugMode) System.out.println("Updated existing animation speed modifier to " + speedMod.speed);
             }
 
             animation.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(2, Ease.INOUTSINE),
@@ -204,7 +205,7 @@ public class WynnanimatedClient implements ClientModInitializer {
                             .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL)
                             .setFirstPersonConfiguration(firstPersonConfiguration), true);
         } else {
-            System.out.println("Failed to locate animation");
+            if (debugMode) System.out.println("Failed to locate animation");
         }
     }
 

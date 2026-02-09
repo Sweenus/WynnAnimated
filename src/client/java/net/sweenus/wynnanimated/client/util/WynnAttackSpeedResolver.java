@@ -1,6 +1,7 @@
 package net.sweenus.wynnanimated.client.util;
 
 import net.minecraft.item.ItemStack;
+import net.sweenus.wynnanimated.client.WynnanimatedClient;
 
 import java.util.Locale;
 import java.util.Map;
@@ -25,7 +26,7 @@ public final class WynnAttackSpeedResolver {
 
             for (var entry : SPEED_TO_TICKS.entrySet()) {
                 if (raw.contains(entry.getKey())) {
-                    System.out.println("Weapon speed is " +entry.getKey() + " " + entry.getValue());
+                    if (WynnanimatedClient.debugMode) System.out.println("Weapon speed is " +entry.getKey() + " " + entry.getValue());
                     return entry.getValue();
                 }
             }

@@ -141,7 +141,7 @@ public class SpellCastHandler {
                 WynnanimatedClient.playAnimation(player, WynnanimatedClient.BATTLECRY_ANIMATION, WynnanimatedClient.BATTLECRY_SPEED);
                 break;
             default:
-                System.out.println("Unknown animation type: " + spellName);
+                if (WynnanimatedClient.debugMode) System.out.println("Unknown animation type: " + spellName);
         }
 
     }
@@ -176,7 +176,7 @@ public class SpellCastHandler {
             int elapsedTicks = Math.round((1.0f - progress) * cooldownTicks);
             if (elapsedTicks > EARLY_COOLDOWN_THRESHOLD) return false;
         }
-        System.out.println("class is: " + wynnClass);
+        if (WynnanimatedClient.debugMode) System.out.println("class is: " + wynnClass);
 
         Identifier animId = switch (wynnClass) {
             case "Archer/Hunter" -> WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
@@ -202,7 +202,7 @@ public class SpellCastHandler {
             float speed = Math.min((float) animDuration / cooldownTicks, MAX_ANIMATION_SPEED);
             WynnanimatedClient.playAnimation(player, animId, speed);
             activeAttackAnimId = null;
-            System.out.println("Performing attack animation for " + wynnClass
+            if (WynnanimatedClient.debugMode) System.out.println("Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks + ", speed: " + speed);
         } else if (animDuration > 0 && animDuration < cooldownTicks) {
             // Animation is shorter than cooldown - normal speed then slow tail
@@ -214,14 +214,14 @@ public class SpellCastHandler {
             int tailGameTicks = cooldownTicks - normalPhaseTicks;
             slowPhaseSpeed = (float) tailAnimTicks / tailGameTicks;
             totalPacingTicks = cooldownTicks;
-            System.out.println("Performing attack animation for " + wynnClass
+            if (WynnanimatedClient.debugMode) System.out.println("Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks
                     + ", normalPhase: " + normalPhaseTicks + " ticks, slowPhase speed: " + slowPhaseSpeed);
         } else {
             // Animation matches cooldown exactly (or duration unknown) - play at normal speed
             WynnanimatedClient.playAnimation(player, animId, 1.0f);
             activeAttackAnimId = null;
-            System.out.println("Performing attack animation for " + wynnClass
+            if (WynnanimatedClient.debugMode) System.out.println("Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks + ", speed: 1.0");
         }
 
@@ -248,21 +248,21 @@ public class SpellCastHandler {
 
         if (useCooldownObserver) {
             cooldownTicks = WynnCooldownCache.get(stack);
-            System.out.println("Using cooldown observer: " + cooldownTicks + " ticks");
+            if (WynnanimatedClient.debugMode) System.out.println("Using cooldown observer: " + cooldownTicks + " ticks");
         } else {
             cooldownTicks = WynnAttackSpeedResolver.resolveCooldownFromLore(stack);
 
             if (cooldownTicks < 0) {
                 cooldownTicks = WynnCooldownCache.get(stack);
-                System.out.println("Lore resolver failed, falling back to cache: " + cooldownTicks + " ticks");
+                if (WynnanimatedClient.debugMode) System.out.println("Lore resolver failed, falling back to cache: " + cooldownTicks + " ticks");
             } else {
-                System.out.println("Using lore resolver: " + cooldownTicks + " ticks");
+                if (WynnanimatedClient.debugMode) System.out.println("Using lore resolver: " + cooldownTicks + " ticks");
             }
         }
 
         if (cooldownTicks < 0) {
             cooldownTicks = 15; // safe fallback
-            System.out.println("Both methods failed, using fallback: " + cooldownTicks + " ticks");
+            if (WynnanimatedClient.debugMode) System.out.println("Both methods failed, using fallback: " + cooldownTicks + " ticks");
         }
 
         return cooldownTicks;
