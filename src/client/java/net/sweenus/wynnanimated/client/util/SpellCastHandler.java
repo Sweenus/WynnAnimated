@@ -93,7 +93,7 @@ public class SpellCastHandler {
                 WynnanimatedClient.playAnimation(player, WynnanimatedClient.SLAM_ANIMATION, WynnanimatedClient.SLAM_SPEED);
                 break;
             case "Charge":
-                // No animation
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
                 break;
             case "Uppercut":
                 WynnanimatedClient.playAnimation(player, WynnanimatedClient.UP_SLASH_ANIMATION, WynnanimatedClient.UP_SLASH_SPEED);
@@ -109,14 +109,14 @@ public class SpellCastHandler {
                 // No animation
                 break;
             case "Arrow Bomb":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BOW_SHOOT_ANIMATION, WynnanimatedClient.BOW_SHOOT_HORIZONTAL_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION, WynnanimatedClient.BOW_SHOOT_HORIZONTAL_SPEED);
                 break;
             case "Arrow Shield":
-                // No animation
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_ALT_SPEED);
                 break;
 
             case "Heal":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_HEAL_ANIMATION, WynnanimatedClient.SPELL_HEAL_SPEED);
                 break;
             case "Teleport":
                 WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
@@ -126,6 +126,19 @@ public class SpellCastHandler {
                 break;
             case "Ice Snake":
                 WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_ICE_SNAKE_ANIMATION, WynnanimatedClient.SPELL_ICE_SNAKE_SPEED);
+                break;
+
+            case "Totem":
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_ICE_SNAKE_ANIMATION, WynnanimatedClient.SPELL_ICE_SNAKE_SPEED);
+                break;
+            case "Haul":
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
+                break;
+            case "Aura":
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_AURA_ANIMATION, WynnanimatedClient.SPELL_AURA_SPEED);
+                break;
+            case "Uproot":
+                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BATTLECRY_ANIMATION, WynnanimatedClient.BATTLECRY_SPEED);
                 break;
             default:
                 System.out.println("Unknown animation type: " + spellName);
@@ -141,7 +154,7 @@ public class SpellCastHandler {
     private static int totalPacingTicks = 0;
     private static final float NORMAL_SPEED_PORTION = 0.8f;
     private static final int EARLY_COOLDOWN_THRESHOLD = 4;
-    private static final float MAX_ANIMATION_SPEED = 5.0f;
+    private static final float MAX_ANIMATION_SPEED = 6.0f;
 
     public static boolean performAttackAnimation() {
         if (!WynnanimatedClient.isWynntilsLoaded()) return false;

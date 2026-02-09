@@ -51,6 +51,10 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final float SPELL_CAST_ALT_SPEED = 1.6f;
     public static final Identifier SPELL_ICE_SNAKE_ANIMATION = Identifier.of(MOD_ID, "spell_ice_snake");
     public static final float SPELL_ICE_SNAKE_SPEED = 1.1f;
+    public static final Identifier SPELL_HEAL_ANIMATION = Identifier.of(MOD_ID, "spell_heal");
+    public static final float SPELL_HEAL_SPEED = 1.2f;
+    public static final Identifier SPELL_AURA_ANIMATION = Identifier.of(MOD_ID, "spell_aura");
+    public static final float SPELL_AURA_SPEED = 1.0f;
 
 
     public static final Identifier BOW_SHOOT_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_horizontal");
@@ -161,6 +165,12 @@ public class WynnanimatedClient implements ClientModInitializer {
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_ICE_SNAKE_ANIMATION, 10,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_HEAL_ANIMATION, 10,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_AURA_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         System.out.println("Registered WynnAnimated animations");
