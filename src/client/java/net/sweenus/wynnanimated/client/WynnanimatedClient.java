@@ -67,7 +67,9 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final Identifier BOW_RAPIDFIRE_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_rapidfire_vertical");
     public static final float BOW_RAPIDFIRE_VERTICAL_SPEED = 2.5f;
     public static final float BOW_SHOOT_HORIZONTAL_SPEED = 1.2f;
-    public static final Identifier BOW_SHOOT_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_vertical");
+    public static final Identifier BOW_SHOOT_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_vertical_ease");
+    public static final Identifier BOW_STANCE_READY_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_vertical_ease_ready");
+    public static final float BOW_STANCE_READY_SPEED = 1.0f;
     public static final Identifier SLASH_RIGHT_ANIMATION = Identifier.of(MOD_ID, "slash_right");
     public static final float SLASH_RIGHT_SPEED = 1.0f;
     public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
@@ -198,6 +200,9 @@ public class WynnanimatedClient implements ClientModInitializer {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPPERCUT_ANIMATION, 10,
                 (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_STANCE_READY_ANIMATION, 8,
+                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+
         if (debugMode) System.out.println("Registered WynnAnimated animations");
     }
 
@@ -251,6 +256,14 @@ public class WynnanimatedClient implements ClientModInitializer {
         var layer = ((KeyframeAnimationPlayer)animation.getAnimation());
         if (layer != null && layer.getData().getName().equals(selectedAnimation))
             layer.stop();
+    }
+
+    public static void fadeOutAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation, int fadeTicks) {
+        var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
+        if (animation != null && animation.isActive()) {
+            animation.replaceAnimationWithFade(
+                    AbstractFadeModifier.standardFadeIn(fadeTicks, Ease.INOUTSINE), null, true);
+        }
     }
 
     public static boolean isPlayingCustomAnimation(AbstractClientPlayerEntity player, Identifier animation) {

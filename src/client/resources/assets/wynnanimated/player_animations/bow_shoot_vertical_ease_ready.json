@@ -1,5 +1,5 @@
 {
-    "name": "bow_stance_ready",
+    "name": "bow_shoot_vertical_ease_ready",
     "author": "Sweenus",
     "description": "Ranged fire",
     "emote":{
@@ -24,7 +24,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "torso":{
-                    "yaw":0.5515240430831909
+                    "yaw":0.44532424211502075
                 }
             },
             {
@@ -32,7 +32,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
-                    "yaw":0.45902156829833984
+                    "yaw":0.45204025506973267
                 }
             },
             {
@@ -40,7 +40,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
-                    "roll":0.041887909173965454
+                    "roll":0.08552113175392151
                 }
             },
             {
@@ -48,7 +48,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
-                    "y":0.7600002288818359
+                    "y":1.8400001525878906
                 }
             },
             {
@@ -56,7 +56,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
-                    "z":-3.4800000190734863
+                    "z":-4.159999847412109
                 }
             },
             {
@@ -64,7 +64,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
-                    "x":-2.080000162124634
+                    "x":-2.348480224609375
                 }
             },
             {
@@ -72,7 +72,15 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
-                    "pitch":-1.5568336248397827
+                    "pitch":-1.4067353010177612
+                }
+            },
+            {
+                "tick":4,
+                "easing": "EASEINOUTQUAD",
+                "turn": 0,
+                "leftArm":{
+                    "pitch":-1.3962633609771729
                 }
             },
             {
@@ -88,7 +96,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
-                    "yaw":0.759218156337738
+                    "yaw":0.9267697334289551
                 }
             },
             {
@@ -96,7 +104,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
-                    "pitch":-1.6022121906280518
+                    "y":0.2799997329711914
                 }
             },
             {
@@ -104,7 +112,15 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
-                    "z":0.5199999809265137
+                    "z":-4.746249198913574
+                }
+            },
+            {
+                "tick":4,
+                "easing": "EASEINOUTQUAD",
+                "turn": 0,
+                "leftArm":{
+                    "x":2.5199999809265137
                 }
             },
             {
@@ -128,7 +144,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "pitch":0.19198620319366455
+                    "pitch":0.1483529806137085
                 }
             },
             {
@@ -136,7 +152,15 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "yaw":-0.19198620319366455
+                    "yaw":-0.02617993764579296
+                }
+            },
+            {
+                "tick":4,
+                "easing": "EASEINOUTQUAD",
+                "turn": 0,
+                "rightItem":{
+                    "roll":-0.057595860213041306
                 }
             }
         ]

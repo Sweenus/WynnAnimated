@@ -10,7 +10,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Asynchronously fetches and caches player class types from the Wynncraft API.
@@ -21,10 +24,17 @@ public final class WynnPlayerClassCache {
 
     private static final String API_BASE = "https://api.wynncraft.com/v3/player/";
     private static final long RETRY_DELAY_MS = 60_000;
+    private static final long RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+    private static final int MAX_REQUESTS_PER_WINDOW = 60;
 
     private static final ConcurrentHashMap<String, String> classCache = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, Long> failedTimestamps = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap.KeySetView<String, Boolean> pendingRequests = ConcurrentHashMap.newKeySet();
+
+    // Rate limiting: track request timestamps within the current window
+    private static final Queue<Long> requestTimestamps = new ArrayDeque<>();
+    private static final ReentrantLock rateLimitLock = new ReentrantLock();
+    private static long windowStartTime = 0;
 
     private static final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(5))
@@ -45,12 +55,52 @@ public final class WynnPlayerClassCache {
         Long failedAt = failedTimestamps.get(username);
         if (failedAt != null && System.currentTimeMillis() - failedAt < RETRY_DELAY_MS) return null;
 
+        // Check rate limit before proceeding
+        if (!isBelowRateLimit()) {
+            if (WynnanimatedClient.debugMode) {
+                System.out.println("[WynnAnimated] Rate limit exceeded for " + username + ", skipping request");
+            }
+            return null;
+        }
+
         // Trigger async fetch if not already in flight
         if (pendingRequests.add(username)) {
             fetchPlayerClassAsync(username);
         }
 
         return null;
+    }
+
+    private static boolean isBelowRateLimit() {
+        rateLimitLock.lock();
+        try {
+            long now = System.currentTimeMillis();
+            
+            // Reset window if needed
+            if (now - windowStartTime >= RATE_LIMIT_WINDOW_MS) {
+                requestTimestamps.clear();
+                windowStartTime = now;
+            }
+            
+            // Check if we're under the limit
+            if (requestTimestamps.size() < MAX_REQUESTS_PER_WINDOW) {
+                requestTimestamps.add(now);
+                return true;
+            }
+            
+            // If we're at the limit, check if the oldest request is still within the window
+            Long oldest = requestTimestamps.peek();
+            if (oldest != null && now - oldest < RATE_LIMIT_WINDOW_MS) {
+                return false; // Rate limit exceeded
+            }
+            
+            // If oldest request is outside the window, remove it and allow new request
+            requestTimestamps.poll();
+            requestTimestamps.add(now);
+            return true;
+        } finally {
+            rateLimitLock.unlock();
+        }
     }
 
     private static void fetchPlayerClassAsync(String username) {
@@ -96,6 +146,13 @@ public final class WynnPlayerClassCache {
                         }
                     }
                     pendingRequests.remove(username);
+                    // Remove timestamp when request is complete to maintain rate limit accuracy
+                    rateLimitLock.lock();
+                    try {
+                        requestTimestamps.removeIf(timestamp -> timestamp == System.currentTimeMillis());
+                    } finally {
+                        rateLimitLock.unlock();
+                    }
                 })
                 .exceptionally(e -> {
                     failedTimestamps.put(username, System.currentTimeMillis());
