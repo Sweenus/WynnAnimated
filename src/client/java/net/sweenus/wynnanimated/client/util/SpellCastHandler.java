@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.AnimationRegistry;
 
 public class SpellCastHandler {
 
@@ -72,76 +72,76 @@ public class SpellCastHandler {
 
 
     public static void performSpellAnimation(String spellName) {
-        if (!WynnanimatedClient.isWynntilsLoaded()) return;
+        if (!AnimationRegistry.isWynntilsLoaded()) return;
         AbstractClientPlayerEntity player = MinecraftClient.getInstance().player;
 
         switch (spellName) {
             case "Spin Attack":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPIN_ANIMATION, WynnanimatedClient.SPIN_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPIN_ANIMATION, AnimationRegistry.SPIN_SPEED);
                 break;
             case "Dash":
                 // No animation
                 break;
             case "Multi Hit":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.RANGED_SLASH_ANIMATION, WynnanimatedClient.RANGED_SLASH_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.RANGED_SLASH_ANIMATION, AnimationRegistry.RANGED_SLASH_SPEED);
                 break;
             case "Smoke Bomb":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.THROW_ANIMATION, WynnanimatedClient.THROW_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.THROW_ANIMATION, AnimationRegistry.THROW_SPEED);
                 break;
 
             case "Bash":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SLAM_ANIMATION, WynnanimatedClient.SLAM_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SLAM_ANIMATION, AnimationRegistry.SLAM_SPEED);
                 break;
             case "Charge":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ANIMATION, AnimationRegistry.SPELL_CAST_SPEED);
                 break;
             case "Uppercut":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.UPPERCUT_ANIMATION, WynnanimatedClient.UPPERCUT_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.UPPERCUT_ANIMATION, AnimationRegistry.UPPERCUT_SPEED);
                 break;
             case "War Scream":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BATTLECRY_ANIMATION, WynnanimatedClient.BATTLECRY_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.BATTLECRY_ANIMATION, AnimationRegistry.BATTLECRY_SPEED);
                 break;
 
             case "Arrow Storm":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BOW_RAPIDFIRE_VERTICAL_ANIMATION, WynnanimatedClient.BOW_RAPIDFIRE_VERTICAL_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.BOW_RAPIDFIRE_VERTICAL_ANIMATION, AnimationRegistry.BOW_RAPIDFIRE_VERTICAL_SPEED);
                 break;
             case "Escape":
                 // No animation
                 break;
             case "Arrow Bomb":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION, WynnanimatedClient.BOW_SHOOT_HORIZONTAL_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION, AnimationRegistry.BOW_SHOOT_HORIZONTAL_SPEED);
                 break;
             case "Arrow Shield":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_ALT_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ANIMATION, AnimationRegistry.SPELL_CAST_ALT_SPEED);
                 break;
 
             case "Heal":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_HEAL_ANIMATION, WynnanimatedClient.SPELL_HEAL_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_HEAL_ANIMATION, AnimationRegistry.SPELL_HEAL_SPEED);
                 break;
             case "Teleport":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ANIMATION, AnimationRegistry.SPELL_CAST_SPEED);
                 break;
             case "Meteor":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ALT_ANIMATION, WynnanimatedClient.SPELL_CAST_ALT_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ALT_ANIMATION, AnimationRegistry.SPELL_CAST_ALT_SPEED);
                 break;
             case "Ice Snake":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_ICE_SNAKE_ANIMATION, WynnanimatedClient.SPELL_ICE_SNAKE_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_ICE_SNAKE_ANIMATION, AnimationRegistry.SPELL_ICE_SNAKE_SPEED);
                 break;
 
             case "Totem":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_ICE_SNAKE_ANIMATION, WynnanimatedClient.SPELL_ICE_SNAKE_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_ICE_SNAKE_ANIMATION, AnimationRegistry.SPELL_ICE_SNAKE_SPEED);
                 break;
             case "Haul":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_CAST_ANIMATION, WynnanimatedClient.SPELL_CAST_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ANIMATION, AnimationRegistry.SPELL_CAST_SPEED);
                 break;
             case "Aura":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.SPELL_AURA_ANIMATION, WynnanimatedClient.SPELL_AURA_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_AURA_ANIMATION, AnimationRegistry.SPELL_AURA_SPEED);
                 break;
             case "Uproot":
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BATTLECRY_ANIMATION, WynnanimatedClient.BATTLECRY_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.BATTLECRY_ANIMATION, AnimationRegistry.BATTLECRY_SPEED);
                 break;
             default:
-                if (WynnanimatedClient.debugMode) System.out.println("Unknown animation type: " + spellName);
+                if (AnimationRegistry.debugMode) System.out.println("Unknown animation type: " + spellName);
         }
 
     }
@@ -169,11 +169,11 @@ public class SpellCastHandler {
         Identifier animId;
         if (wynnClass != null) {
             animId = switch (wynnClass) {
-                case "Archer/Hunter" -> WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
-                case "Warrior/Knight" -> WynnanimatedClient.SWING_ANIMATION;
-                case "Mage/Dark Wizard" -> WynnanimatedClient.SPELL_CAST_ANIMATION;
-                case "Assassin/Ninja" -> WynnanimatedClient.ROGUE_SLASH_ANIMATION;
-                case "Shaman/Skyseer" -> WynnanimatedClient.THROW_ANIMATION;
+                case "Archer/Hunter" -> AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION;
+                case "Warrior/Knight" -> AnimationRegistry.SWING_ANIMATION;
+                case "Mage/Dark Wizard" -> AnimationRegistry.SPELL_CAST_ANIMATION;
+                case "Assassin/Ninja" -> AnimationRegistry.ROGUE_SLASH_ANIMATION;
+                case "Shaman/Skyseer" -> AnimationRegistry.THROW_ANIMATION;
                 default -> null;
                 };
             } else {
@@ -190,11 +190,11 @@ public class SpellCastHandler {
             int elapsedTicks = Math.round((1.0f - progress) * cooldownTicks);
             if (elapsedTicks > EARLY_COOLDOWN_THRESHOLD) return false;
         }
-        if (WynnanimatedClient.debugMode) System.out.println("class is: " + (wynnClass != null ? wynnClass : "inferred +from weapon"));
+        if (AnimationRegistry.debugMode) System.out.println("class is: " + (wynnClass != null ? wynnClass : "inferred +from weapon"));
 
 
         // Don't restart if this animation is already playing (prevents stutter on fast cooldown weapons)
-        if (WynnanimatedClient.isPlayingCustomAnimation(player, animId)) return true;
+        if (AnimationRegistry.isPlayingCustomAnimation(player, animId)) return true;
 
         // Get animation's full duration (stopTick, not endTick, to include the return-to-rest phase)
         KeyframeAnimation anim = (KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animId);
@@ -205,13 +205,13 @@ public class SpellCastHandler {
         if (animDuration > 0 && animDuration > cooldownTicks) {
             // Animation is longer than cooldown - uniform speedup to fit
             float speed = Math.min((float) animDuration / cooldownTicks, MAX_ANIMATION_SPEED);
-            WynnanimatedClient.playAnimation(player, animId, speed);
+            AnimationRegistry.playAnimation(player, animId, speed);
             activeAttackAnimId = null;
-            if (WynnanimatedClient.debugMode) System.out.println("Performing attack animation for " + wynnClass
+            if (AnimationRegistry.debugMode) System.out.println("Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks + ", speed: " + speed);
         } else if (animDuration > 0 && animDuration < cooldownTicks) {
             // Animation is shorter than cooldown - normal speed then slow tail
-            WynnanimatedClient.playAnimation(player, animId, 1.0f);
+            AnimationRegistry.playAnimation(player, animId, 1.0f);
             activeAttackAnimId = animId;
             animStartTick = player.age;
             normalPhaseTicks = (int) (animDuration * NORMAL_SPEED_PORTION);
@@ -219,14 +219,14 @@ public class SpellCastHandler {
             int tailGameTicks = cooldownTicks - normalPhaseTicks;
             slowPhaseSpeed = (float) tailAnimTicks / tailGameTicks;
             totalPacingTicks = cooldownTicks;
-            if (WynnanimatedClient.debugMode) System.out.println("Performing attack animation for " + wynnClass
+            if (AnimationRegistry.debugMode) System.out.println("Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks
                     + ", normalPhase: " + normalPhaseTicks + " ticks, slowPhase speed: " + slowPhaseSpeed);
         } else {
             // Animation matches cooldown exactly (or duration unknown) - play at normal speed
-            WynnanimatedClient.playAnimation(player, animId, 1.0f);
+            AnimationRegistry.playAnimation(player, animId, 1.0f);
             activeAttackAnimId = null;
-            if (WynnanimatedClient.debugMode) System.out.println("Performing attack animation for " + wynnClass
+            if (AnimationRegistry.debugMode) System.out.println("Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks + ", speed: 1.0");
         }
 
@@ -244,7 +244,7 @@ public class SpellCastHandler {
         }
 
         float speed = (elapsed <= normalPhaseTicks) ? 1.0f : slowPhaseSpeed;
-        WynnanimatedClient.updateAnimationSpeed(player, activeAttackAnimId, speed);
+        AnimationRegistry.updateAnimationSpeed(player, activeAttackAnimId, speed);
     }
 
     private static boolean useCooldownObserver = true; // false = use lore resolver, true = use cooldown observer
@@ -253,21 +253,21 @@ public class SpellCastHandler {
 
         if (useCooldownObserver) {
             cooldownTicks = WynnCooldownCache.get(stack);
-            if (WynnanimatedClient.debugMode) System.out.println("Using cooldown observer: " + cooldownTicks + " ticks");
+            if (AnimationRegistry.debugMode) System.out.println("Using cooldown observer: " + cooldownTicks + " ticks");
         } else {
             cooldownTicks = WynnAttackSpeedResolver.resolveCooldownFromLore(stack);
 
             if (cooldownTicks < 0) {
                 cooldownTicks = WynnCooldownCache.get(stack);
-                if (WynnanimatedClient.debugMode) System.out.println("Lore resolver failed, falling back to cache: " + cooldownTicks + " ticks");
+                if (AnimationRegistry.debugMode) System.out.println("Lore resolver failed, falling back to cache: " + cooldownTicks + " ticks");
             } else {
-                if (WynnanimatedClient.debugMode) System.out.println("Using lore resolver: " + cooldownTicks + " ticks");
+                if (AnimationRegistry.debugMode) System.out.println("Using lore resolver: " + cooldownTicks + " ticks");
             }
         }
 
         if (cooldownTicks < 0) {
             cooldownTicks = 15; // safe fallback
-            if (WynnanimatedClient.debugMode) System.out.println("Both methods failed, using fallback: " + cooldownTicks + " ticks");
+            if (AnimationRegistry.debugMode) System.out.println("Both methods failed, using fallback: " + cooldownTicks + " ticks");
         }
 
         return cooldownTicks;

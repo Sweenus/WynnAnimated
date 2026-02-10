@@ -1,7 +1,7 @@
 package net.sweenus.wynnanimated.client.mixin;
 
 import net.minecraft.client.MinecraftClient;
-import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.AnimationRegistry;
 import net.sweenus.wynnanimated.client.util.SpellCastHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +30,7 @@ public class SpellModelMixin {
             Method getName = spellType.getClass().getMethod("getName");
             String spellName = (String) getName.invoke(spellType);
 
-            if (WynnanimatedClient.debugMode) System.out.println("Spell cast: " + spellName);
+            if (AnimationRegistry.debugMode) System.out.println("Spell cast: " + spellName);
             MinecraftClient.getInstance().execute(() -> {
                 SpellCastHandler.performSpellAnimation(spellName);
             });

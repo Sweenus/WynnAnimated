@@ -2,7 +2,7 @@ package net.sweenus.wynnanimated.client.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.AnimationRegistry;
 import net.sweenus.wynnanimated.client.util.SpellCastHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +26,7 @@ public class AutoAttackFeatureMixin {
         if (player == null) return;
 
         // Skip if AbstractClientPlayerMixin already triggered an animation this tick
-        if (WynnanimatedClient.isPlayingAnyAnimation((AbstractClientPlayerEntity) player, WynnanimatedClient.basicAttackList))
+        if (AnimationRegistry.isPlayingAnyAnimation((AbstractClientPlayerEntity) player, AnimationRegistry.basicAttackList))
             return;
 
         MinecraftClient.getInstance().execute(() -> {

@@ -8,7 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.AnimationRegistry;
 import net.sweenus.wynnanimated.client.util.AttackTracker;
 import net.sweenus.wynnanimated.client.util.WynnPlayerClassCache;
 import net.sweenus.wynnanimated.client.util.WynnWeaponResolver;
@@ -46,8 +46,8 @@ public class LivingEntityMixin {
             String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
             if (classType != null) {
                 Identifier animId = WynnWeaponResolver.resolveAttackAnimationFromClass(classType);
-                if (animId != null && !WynnanimatedClient.isPlayingCustomAnimation(otherPlayer, animId)) {
-                    WynnanimatedClient.playAnimation(otherPlayer, animId, 1.5f);
+                if (animId != null && !AnimationRegistry.isPlayingCustomAnimation(otherPlayer, animId)) {
+                    AnimationRegistry.playAnimation(otherPlayer, animId, 1.5f);
                 }
             }
         }
@@ -63,17 +63,17 @@ public class LivingEntityMixin {
 
         // Detect bow sounds relative to other player position (don't know a better way to detect bow basic attacks)
         // Requires the other player to be on the same channel (does not work with player ghosts)
-        if (WynnanimatedClient.isSpecificSoundPlayingAtCoordinates(
+        if (AnimationRegistry.isSpecificSoundPlayingAtCoordinates(
                 Identifier.of("minecraft", "entity.splash_potion.throw"),
                 otherPlayer.getX(), otherPlayer.getY(), otherPlayer.getZ())) {
-            if (WynnanimatedClient.debugMode)
+            if (AnimationRegistry.debugMode)
                 System.out.println("Detected bow shoot sound from " + otherPlayer.getDisplayName() + "'s position");
 
             String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
             if ("ARCHER".equals(classType)) {
-                Identifier animId = WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
-                if (!WynnanimatedClient.isPlayingCustomAnimation(otherPlayer, animId)) {
-                    WynnanimatedClient.playAnimation(otherPlayer, animId, 1.8f);
+                Identifier animId = AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION;
+                if (!AnimationRegistry.isPlayingCustomAnimation(otherPlayer, animId)) {
+                    AnimationRegistry.playAnimation(otherPlayer, animId, 1.8f);
                 }
             }
         }

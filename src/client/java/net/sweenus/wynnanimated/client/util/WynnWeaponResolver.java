@@ -4,7 +4,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
-import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.AnimationRegistry;
 import org.jetbrains.annotations.Nullable;
 
 public final class WynnWeaponResolver {
@@ -18,11 +18,11 @@ public final class WynnWeaponResolver {
     public static @Nullable Identifier resolveAttackAnimation(AbstractClientPlayerEntity player) {
         Item item = player.getMainHandStack().getItem();
 
-        if (item == Items.BOW)          return WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
-        if (item == Items.IRON_SHOVEL)  return WynnanimatedClient.SWING_ANIMATION;
-        if (item == Items.WOODEN_SHOVEL)return WynnanimatedClient.SPELL_CAST_ANIMATION;
-        if (item == Items.SHEARS)       return WynnanimatedClient.ROGUE_SLASH_ANIMATION;
-        if (item == Items.STONE_SHOVEL) return WynnanimatedClient.THROW_ANIMATION;
+        if (item == Items.BOW)          return AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION;
+        if (item == Items.IRON_SHOVEL)  return AnimationRegistry.SWING_ANIMATION;
+        if (item == Items.WOODEN_SHOVEL)return AnimationRegistry.SPELL_CAST_ANIMATION;
+        if (item == Items.SHEARS)       return AnimationRegistry.ROGUE_SLASH_ANIMATION;
+        if (item == Items.STONE_SHOVEL) return AnimationRegistry.THROW_ANIMATION;
 
         return null;
     }
@@ -33,11 +33,11 @@ public final class WynnWeaponResolver {
      */
     public static @Nullable Identifier resolveAttackAnimationFromClass(String apiClassType) {
         return switch (apiClassType) {
-            case "ARCHER"   -> WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
-            case "WARRIOR"  -> WynnanimatedClient.SWING_ANIMATION;
-            case "MAGE"     -> WynnanimatedClient.SPELL_CAST_ANIMATION;
-            case "ASSASSIN" -> WynnanimatedClient.ROGUE_SLASH_ANIMATION;
-            case "SHAMAN"   -> WynnanimatedClient.THROW_ANIMATION;
+            case "ARCHER"   -> AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION;
+            case "WARRIOR"  -> AnimationRegistry.SWING_ANIMATION;
+            case "MAGE"     -> AnimationRegistry.SPELL_CAST_ANIMATION;
+            case "ASSASSIN" -> AnimationRegistry.ROGUE_SLASH_ANIMATION;
+            case "SHAMAN"   -> AnimationRegistry.THROW_ANIMATION;
             default -> null;
         };
     }

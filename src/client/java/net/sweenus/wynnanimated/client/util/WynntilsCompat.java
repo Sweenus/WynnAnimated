@@ -1,6 +1,6 @@
 package net.sweenus.wynnanimated.client.util;
 
-import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.AnimationRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -12,7 +12,7 @@ public final class WynntilsCompat {
     private static Object characterModel;
 
     public static @Nullable String getPlayerClass() {
-        if (!WynnanimatedClient.isWynntilsLoaded()) return null;
+        if (!AnimationRegistry.isWynntilsLoaded()) return null;
 
         //System.out.println("fetching Wynntils class");
         try {

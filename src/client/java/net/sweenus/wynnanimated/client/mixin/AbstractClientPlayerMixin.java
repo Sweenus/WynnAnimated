@@ -3,7 +3,7 @@ package net.sweenus.wynnanimated.client.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.AnimationRegistry;
 import net.sweenus.wynnanimated.client.util.AttackTracker;
 import net.sweenus.wynnanimated.client.util.SpellCastHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +39,7 @@ public abstract class AbstractClientPlayerMixin {
             MinecraftClient.getInstance().execute(() -> {
                 //Debug
                 //SpellCastHandler.performSpellAnimation("Spin Attack");
-                //WynnanimatedClient.playAnimation(player, WynnanimatedClient.TEST_ANIMATION, WynnanimatedClient.TEST_SPEED);
+                //AnimationRegistry.playAnimation(player, AnimationRegistry.TEST_ANIMATION, AnimationRegistry.TEST_SPEED);
             });
 
         // Detect the start of a new swing
@@ -55,7 +55,7 @@ public abstract class AbstractClientPlayerMixin {
                 // Suppress vanilla hand swing when custom animation is playing
                 player.handSwinging = false;
             }
-        } else if (!WynnanimatedClient.isPlayingAnyAnimation(player, WynnanimatedClient.basicAttackList)
+        } else if (!AnimationRegistry.isPlayingAnyAnimation(player, AnimationRegistry.basicAttackList)
                 && player.isUsingItem()
                 && player.getItemCooldownManager().isCoolingDown(player.getMainHandStack())) {
             SpellCastHandler.performAttackAnimation();
@@ -65,7 +65,7 @@ public abstract class AbstractClientPlayerMixin {
         SpellCastHandler.tickAttackAnimationSpeed(player);
 
         // Smoothly align body toward camera direction during animations so first-person arms track correctly
-        if (player.age - WynnanimatedClient.lastAnimationPlayedTick < AttackTracker.SWING_SUPPRESS_TICKS) {
+        if (player.age - AnimationRegistry.lastAnimationPlayedTick < AttackTracker.SWING_SUPPRESS_TICKS) {
             float diff = MathHelper.wrapDegrees(player.getYaw() - player.bodyYaw);
             player.bodyYaw += diff * 0.9f;
         }
@@ -75,12 +75,12 @@ public abstract class AbstractClientPlayerMixin {
         // The attack layer fully hides the stance while active, so we start the stance
         // *during* the attack — when the attack ends, the stance shows through instantly
         // with no flash to the default pose.
-        boolean playingBowAttack = WynnanimatedClient.isPlayingCustomAnimation(player, WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION);
+        boolean playingBowAttack = AnimationRegistry.isPlayingCustomAnimation(player, AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION);
 
         // Bow attack just started → ensure stance is playing underneath (hidden by higher-priority attack layer)
         if (playingBowAttack && !wasPlayingBowAttack) {
-            if (!WynnanimatedClient.isPlayingCustomAnimation(player, WynnanimatedClient.BOW_STANCE_READY_ANIMATION)) {
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.BOW_STANCE_READY_ANIMATION, WynnanimatedClient.BOW_STANCE_READY_SPEED);
+            if (!AnimationRegistry.isPlayingCustomAnimation(player, AnimationRegistry.BOW_STANCE_READY_ANIMATION)) {
+                AnimationRegistry.playAnimation(player, AnimationRegistry.BOW_STANCE_READY_ANIMATION, AnimationRegistry.BOW_STANCE_READY_SPEED);
             }
         }
 
@@ -90,9 +90,9 @@ public abstract class AbstractClientPlayerMixin {
         wasPlayingBowAttack = playingBowAttack;
 
         // Idle timeout → fade out stance and return to normal
-        if (WynnanimatedClient.isPlayingCustomAnimation(player, WynnanimatedClient.BOW_STANCE_READY_ANIMATION)
+        if (AnimationRegistry.isPlayingCustomAnimation(player, AnimationRegistry.BOW_STANCE_READY_ANIMATION)
                 && player.age - lastBowAttackTick > STANCE_TIMEOUT_TICKS) {
-            WynnanimatedClient.fadeOutAnimation(player, WynnanimatedClient.BOW_STANCE_READY_ANIMATION, 5);
+            AnimationRegistry.fadeOutAnimation(player, AnimationRegistry.BOW_STANCE_READY_ANIMATION, 5);
         }
     }
 

@@ -2,7 +2,7 @@ package net.sweenus.wynnanimated.client.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.AnimationRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
@@ -57,7 +57,7 @@ public final class WynnPlayerClassCache {
 
         // Check rate limit before proceeding
         if (!isBelowRateLimit()) {
-            if (WynnanimatedClient.debugMode) {
+            if (AnimationRegistry.debugMode) {
                 System.out.println("[WynnAnimated] Rate limit exceeded for " + username + ", skipping request");
             }
             return null;
@@ -140,7 +140,7 @@ public final class WynnPlayerClassCache {
                             String type = json.get("type").getAsString();
                             classCache.put(username, type);
                             failedTimestamps.remove(username);
-                            if (WynnanimatedClient.debugMode) {
+                            if (AnimationRegistry.debugMode) {
                                 System.out.println("[WynnAnimated] Fetched class for " + username + ": " + type);
                             }
                         }
@@ -157,7 +157,7 @@ public final class WynnPlayerClassCache {
                 .exceptionally(e -> {
                     failedTimestamps.put(username, System.currentTimeMillis());
                     pendingRequests.remove(username);
-                    if (WynnanimatedClient.debugMode) {
+                    if (AnimationRegistry.debugMode) {
                         System.out.println("[WynnAnimated] Failed to fetch class for " + username + ": " + e.getMessage());
                     }
                     return null;
