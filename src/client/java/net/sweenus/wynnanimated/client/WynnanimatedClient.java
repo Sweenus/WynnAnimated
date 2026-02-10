@@ -15,8 +15,11 @@ import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.util.Identifier;
+import net.sweenus.wynnanimated.client.util.CustomSoundListener;
 import net.sweenus.wynnanimated.client.util.WynnCooldownObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +86,7 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static boolean debugMode = true;
     public static boolean shouldShowArms = true; // Make this configurable later
     public static final FirstPersonConfiguration firstPersonConfiguration = new FirstPersonConfiguration();
+    private static final CustomSoundListener soundListener = new CustomSoundListener();
 
     @Override
     public void onInitializeClient() {
@@ -96,6 +100,20 @@ public class WynnanimatedClient implements ClientModInitializer {
                 WynnCooldownObserver.tick(player);
             }
         });
+
+        MinecraftClient client = MinecraftClient.getInstance();
+        client.execute(() -> {
+            if (client.getSoundManager() != null) {
+                client.getSoundManager().registerListener(soundListener);
+                if (debugMode)
+                    System.out.println("Registered WynnAnimated Sound Listener");
+            }
+        });
+
+    }
+
+    public static boolean isSpecificSoundPlayingAtCoordinates(Identifier soundId, double x, double y, double z) {
+        return soundListener.isSpecificSoundPlayingAtCoordinates(soundId, x, y, z);
     }
 
     public static void setFirstPersonConfiguration() {

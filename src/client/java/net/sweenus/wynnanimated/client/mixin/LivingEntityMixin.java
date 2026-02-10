@@ -25,10 +25,7 @@ public class LivingEntityMixin {
     LivingEntity livingEntity = (LivingEntity) (Object) this;
 
     @Unique
-    private static final double ANIMATION_RANGE_SQ = 20.0 * 20.0; // 32 blocks
-
-    @Unique
-    private boolean wasUsingItem = false;
+    private static final double ANIMATION_RANGE_SQ = 20.0 * 20.0;
 
     @Inject(method = "swingHand(Lnet/minecraft/util/Hand;)V", at = @At("HEAD"), cancellable = true)
     private void wynnanimated$cancelSwing(Hand hand, CallbackInfo ci) {
@@ -50,7 +47,7 @@ public class LivingEntityMixin {
             if (classType != null) {
                 Identifier animId = WynnWeaponResolver.resolveAttackAnimationFromClass(classType);
                 if (animId != null && !WynnanimatedClient.isPlayingCustomAnimation(otherPlayer, animId)) {
-                    WynnanimatedClient.playAnimation(otherPlayer, animId, 1.0f);
+                    WynnanimatedClient.playAnimation(otherPlayer, animId, 1.5f);
                 }
             }
         }
@@ -58,24 +55,25 @@ public class LivingEntityMixin {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void wynnanimated$tickItemUse(CallbackInfo ci) {
-        // Early exit for non-player entities (covers mobs, animals, etc.)
         if (!(livingEntity instanceof AbstractClientPlayerEntity otherPlayer)) return;
 
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || livingEntity == mc.player) return;
         if (otherPlayer.squaredDistanceTo(mc.player) > ANIMATION_RANGE_SQ) return;
 
-        // Detect transition: not using item -> using item (archer bow attack)
-        boolean usingItem = otherPlayer.isUsingItem();
-        boolean startedUsingItem = usingItem && !wasUsingItem;
-        wasUsingItem = usingItem;
+        // Detect bow sounds relative to other player position (don't know a better way to detect bow basic attacks)
+        // Requires the other player to be on the same channel (does not work with player ghosts)
+        if (WynnanimatedClient.isSpecificSoundPlayingAtCoordinates(
+                Identifier.of("minecraft", "entity.splash_potion.throw"),
+                otherPlayer.getX(), otherPlayer.getY(), otherPlayer.getZ())) {
+            if (WynnanimatedClient.debugMode)
+                System.out.println("Detected bow shoot sound from " + otherPlayer.getDisplayName() + "'s position");
 
-        if (startedUsingItem) {
             String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
             if ("ARCHER".equals(classType)) {
                 Identifier animId = WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
                 if (!WynnanimatedClient.isPlayingCustomAnimation(otherPlayer, animId)) {
-                    WynnanimatedClient.playAnimation(otherPlayer, animId, 1.0f);
+                    WynnanimatedClient.playAnimation(otherPlayer, animId, 1.8f);
                 }
             }
         }
