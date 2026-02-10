@@ -31,7 +31,7 @@ public abstract class AbstractClientPlayerMixin {
             MinecraftClient.getInstance().execute(() -> {
                 //Debug
                 //SpellCastHandler.performSpellAnimation("Spin Attack");
-                WynnanimatedClient.playAnimation(player, WynnanimatedClient.TEST_ANIMATION, WynnanimatedClient.TEST_SPEED);
+                //WynnanimatedClient.playAnimation(player, WynnanimatedClient.TEST_ANIMATION, WynnanimatedClient.TEST_SPEED);
             });
 
         // Detect the start of a new swing

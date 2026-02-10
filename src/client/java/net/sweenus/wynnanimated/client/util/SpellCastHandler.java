@@ -157,16 +157,30 @@ public class SpellCastHandler {
     private static final float MAX_ANIMATION_SPEED = 6.0f;
 
     public static boolean performAttackAnimation() {
-        if (!WynnanimatedClient.isWynntilsLoaded()) return false;
-
         AbstractClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return false;
 
         ItemStack stack = player.getMainHandStack();
         if (stack.isEmpty()) return false;
 
+        // Try Wynntils class detection first, fall back to weapon-based resolution
         String wynnClass = WynntilsCompat.getPlayerClass();
-        if (wynnClass == null) return false;
+
+        Identifier animId;
+        if (wynnClass != null) {
+            animId = switch (wynnClass) {
+                case "Archer/Hunter" -> WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
+                case "Warrior/Knight" -> WynnanimatedClient.SWING_ANIMATION;
+                case "Mage/Dark Wizard" -> WynnanimatedClient.SPELL_CAST_ANIMATION;
+                case "Assassin/Ninja" -> WynnanimatedClient.ROGUE_SLASH_ANIMATION;
+                case "Shaman/Skyseer" -> WynnanimatedClient.THROW_ANIMATION;
+                default -> null;
+                };
+            } else {
+            // Wynntils not loaded or class unknown - resolve from held weapon
+                    animId = WynnWeaponResolver.resolveAttackAnimation(player);
+            }
+        if (animId == null) return false;
 
         int cooldownTicks = resolveCooldownTicks(stack);
 
@@ -176,17 +190,8 @@ public class SpellCastHandler {
             int elapsedTicks = Math.round((1.0f - progress) * cooldownTicks);
             if (elapsedTicks > EARLY_COOLDOWN_THRESHOLD) return false;
         }
-        if (WynnanimatedClient.debugMode) System.out.println("class is: " + wynnClass);
+        if (WynnanimatedClient.debugMode) System.out.println("class is: " + (wynnClass != null ? wynnClass : "inferred +from weapon"));
 
-        Identifier animId = switch (wynnClass) {
-            case "Archer/Hunter" -> WynnanimatedClient.BOW_SHOOT_VERTICAL_ANIMATION;
-            case "Warrior/Knight" -> WynnanimatedClient.SWING_ANIMATION;
-            case "Mage/Dark Wizard" -> WynnanimatedClient.SPELL_CAST_ANIMATION;
-            case "Assassin/Ninja" -> WynnanimatedClient.ROGUE_SLASH_ANIMATION;
-            case "Shaman/Skyseer" -> WynnanimatedClient.THROW_ANIMATION;
-            default -> null;
-        };
-        if (animId == null) return false;
 
         // Don't restart if this animation is already playing (prevents stutter on fast cooldown weapons)
         if (WynnanimatedClient.isPlayingCustomAnimation(player, animId)) return true;
@@ -239,7 +244,7 @@ public class SpellCastHandler {
         }
 
         float speed = (elapsed <= normalPhaseTicks) ? 1.0f : slowPhaseSpeed;
-        WynnanimatedClient.updateAnimationSpeed(activeAttackAnimId, speed);
+        WynnanimatedClient.updateAnimationSpeed(player, activeAttackAnimId, speed);
     }
 
     private static boolean useCooldownObserver = true; // false = use lore resolver, true = use cooldown observer

@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.WeakHashMap;
 
 
 public class WynnanimatedClient implements ClientModInitializer {
@@ -52,7 +53,7 @@ public class WynnanimatedClient implements ClientModInitializer {
     public static final Identifier SPELL_CAST_ALT_ANIMATION = Identifier.of(MOD_ID, "spell_cast_alt");
     public static final float SPELL_CAST_ALT_SPEED = 1.6f;
     public static final Identifier SPELL_ICE_SNAKE_ANIMATION = Identifier.of(MOD_ID, "spell_ice_snake");
-    public static final float SPELL_ICE_SNAKE_SPEED = 1.1f;
+    public static final float SPELL_ICE_SNAKE_SPEED = 1.9f;
     public static final Identifier SPELL_HEAL_ANIMATION = Identifier.of(MOD_ID, "spell_heal");
     public static final float SPELL_HEAL_SPEED = 1.2f;
     public static final Identifier SPELL_AURA_ANIMATION = Identifier.of(MOD_ID, "spell_aura");
@@ -61,14 +62,14 @@ public class WynnanimatedClient implements ClientModInitializer {
 
     public static final Identifier BOW_SHOOT_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_horizontal");
     public static final Identifier BOW_RAPIDFIRE_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_rapidfire_vertical");
-    public static final float BOW_RAPIDFIRE_VERTICAL_SPEED = 2.2f;
+    public static final float BOW_RAPIDFIRE_VERTICAL_SPEED = 2.5f;
     public static final float BOW_SHOOT_HORIZONTAL_SPEED = 1.2f;
     public static final Identifier BOW_SHOOT_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_vertical");
     public static final Identifier SLASH_RIGHT_ANIMATION = Identifier.of(MOD_ID, "slash_right");
     public static final float SLASH_RIGHT_SPEED = 1.0f;
     public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
     public static final float SLASH_LEFT_SPEED = 1.0f;
-    public static final Identifier SWING_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing_alt");
+    public static final Identifier SWING_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing_slow");
     public static final float SWING_SPEED = 1.0f;
     public static final float THROW_SHAMAN_SPEED = 1.2f;
     public static final Identifier ROGUE_SLASH_ANIMATION = Identifier.of(MOD_ID, "rogue_slash");
@@ -182,33 +183,29 @@ public class WynnanimatedClient implements ClientModInitializer {
         if (debugMode) System.out.println("Registered WynnAnimated animations");
     }
 
-    private static final Map<Identifier, SpeedModifier> speedModifiers = new HashMap<>();
-    private static AbstractClientPlayerEntity lastAnimPlayer = null;
+    private static final WeakHashMap<AbstractClientPlayerEntity, Map<Identifier, SpeedModifier>> playerSpeedModifiers = new WeakHashMap<>();
     public static int lastAnimationPlayedTick = Integer.MIN_VALUE;
 
     public static void playAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation, float speedValue) {
         var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
         if (animation != null) {
-            // Clear cached modifiers if the player entity changed (respawn, dimension change, etc.)
-            if (player != lastAnimPlayer) {
-                speedModifiers.clear();
-                lastAnimPlayer = player;
-            }
+            Map<Identifier, SpeedModifier> speedMods = playerSpeedModifiers.computeIfAbsent(player, k -> new HashMap<>());
 
-            SpeedModifier speedMod = speedModifiers.get(selectedAnimation);
+            SpeedModifier speedMod = speedMods.get(selectedAnimation);
 
             if (speedMod == null) {
-                // First time (or after player entity change) - create and add the modifier
                 speedMod = new SpeedModifier(speedValue);
                 animation.addModifier(speedMod, 0);
-                speedModifiers.put(selectedAnimation, speedMod);
+                speedMods.put(selectedAnimation, speedMod);
             } else {
-                // Update the existing modifier's speed
                 speedMod.speed = speedValue;
                 if (debugMode) System.out.println("Updated existing animation speed modifier to " + speedMod.speed);
             }
 
-            lastAnimationPlayedTick = player.age;
+            // Only update the body-yaw tracking tick for the local player
+            if (player == net.minecraft.client.MinecraftClient.getInstance().player) {
+                lastAnimationPlayedTick = player.age;
+            }
 
             animation.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(2, Ease.INOUTSINE),
                     new KeyframeAnimationPlayer((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(selectedAnimation))
@@ -219,10 +216,13 @@ public class WynnanimatedClient implements ClientModInitializer {
         }
     }
 
-    public static void updateAnimationSpeed(Identifier animationId, float speedValue) {
-        SpeedModifier speedMod = speedModifiers.get(animationId);
-        if (speedMod != null) {
-            speedMod.speed = speedValue;
+    public static void updateAnimationSpeed(AbstractClientPlayerEntity player, Identifier animationId, float speedValue) {
+        Map<Identifier, SpeedModifier> speedMods = playerSpeedModifiers.get(player);
+        if (speedMods != null) {
+            SpeedModifier speedMod = speedMods.get(animationId);
+            if (speedMod != null) {
+                speedMod.speed = speedValue;
+            }
         }
     }
 
