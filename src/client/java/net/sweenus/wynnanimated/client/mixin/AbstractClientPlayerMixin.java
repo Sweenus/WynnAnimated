@@ -56,7 +56,8 @@ public abstract class AbstractClientPlayerMixin {
                 player.handSwinging = false;
             }
         } else if (!WynnanimatedClient.isPlayingAnyAnimation(player, WynnanimatedClient.basicAttackList)
-                && player.isUsingItem()) {
+                && player.isUsingItem()
+                && player.getItemCooldownManager().isCoolingDown(player.getMainHandStack())) {
             SpellCastHandler.performAttackAnimation();
         }
 
