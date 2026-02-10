@@ -1,11 +1,8 @@
 package net.sweenus.wynnanimated.client.mixin;
 
-import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.sweenus.wynnanimated.client.AnimationRegistry;
@@ -71,7 +68,7 @@ public class LivingEntityMixin {
 
             String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
             if ("ARCHER".equals(classType)) {
-                Identifier animId = AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION;
+                Identifier animId = AnimationRegistry.BASIC_ATTACK_BOW;
                 if (!AnimationRegistry.isPlayingCustomAnimation(otherPlayer, animId)) {
                     AnimationRegistry.playAnimation(otherPlayer, animId, 1.8f);
                 }

@@ -1,7 +1,7 @@
 {
-    "name": "two_handed_swing_slow",
+    "name": "basic_attack_spear",
     "author": "Sweenus",
-    "description": "two handed swing",
+    "description": "basic_attack_spear",
     "emote":{
         "isLoop": "false",
         "returnTick": 2,

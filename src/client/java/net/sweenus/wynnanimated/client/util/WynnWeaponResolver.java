@@ -18,11 +18,11 @@ public final class WynnWeaponResolver {
     public static @Nullable Identifier resolveAttackAnimation(AbstractClientPlayerEntity player) {
         Item item = player.getMainHandStack().getItem();
 
-        if (item == Items.BOW)          return AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION;
-        if (item == Items.IRON_SHOVEL)  return AnimationRegistry.SWING_ANIMATION;
-        if (item == Items.WOODEN_SHOVEL)return AnimationRegistry.SPELL_CAST_ANIMATION;
-        if (item == Items.SHEARS)       return AnimationRegistry.ROGUE_SLASH_ANIMATION;
-        if (item == Items.STONE_SHOVEL) return AnimationRegistry.THROW_ANIMATION;
+        if (item == Items.BOW)          return AnimationRegistry.BASIC_ATTACK_BOW;
+        if (item == Items.IRON_SHOVEL)  return AnimationRegistry.BASIC_ATTACK_SPEAR;
+        if (item == Items.WOODEN_SHOVEL)return AnimationRegistry.BASIC_ATTACK_WAND;
+        if (item == Items.SHEARS)       return AnimationRegistry.BASIC_ATTACK_DAGGER;
+        if (item == Items.STONE_SHOVEL) return AnimationRegistry.BASIC_ATTACK_RELIK;
 
         return null;
     }
@@ -33,11 +33,11 @@ public final class WynnWeaponResolver {
      */
     public static @Nullable Identifier resolveAttackAnimationFromClass(String apiClassType) {
         return switch (apiClassType) {
-            case "ARCHER"   -> AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION;
-            case "WARRIOR"  -> AnimationRegistry.SWING_ANIMATION;
-            case "MAGE"     -> AnimationRegistry.SPELL_CAST_ANIMATION;
-            case "ASSASSIN" -> AnimationRegistry.ROGUE_SLASH_ANIMATION;
-            case "SHAMAN"   -> AnimationRegistry.THROW_ANIMATION;
+            case "ARCHER"   -> AnimationRegistry.BASIC_ATTACK_BOW;
+            case "WARRIOR"  -> AnimationRegistry.BASIC_ATTACK_SPEAR;
+            case "MAGE"     -> AnimationRegistry.BASIC_ATTACK_WAND;
+            case "ASSASSIN" -> AnimationRegistry.BASIC_ATTACK_DAGGER;
+            case "SHAMAN"   -> AnimationRegistry.BASIC_ATTACK_RELIK;
             default -> null;
         };
     }

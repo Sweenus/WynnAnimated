@@ -35,13 +35,6 @@ public abstract class AbstractClientPlayerMixin {
     private void wynnanimated$tick(CallbackInfo ci) {
         if (MinecraftClient.getInstance().player != (Object) this) return;
 
-        if (player.isSneaking())
-            MinecraftClient.getInstance().execute(() -> {
-                //Debug
-                //SpellCastHandler.performSpellAnimation("Spin Attack");
-                //AnimationRegistry.playAnimation(player, AnimationRegistry.TEST_ANIMATION, AnimationRegistry.TEST_SPEED);
-            });
-
         // Detect the start of a new swing
         boolean isNewSwing = AttackTracker.attackInitiated
                 && ((player.handSwinging && !wasHandSwinging)
@@ -75,7 +68,7 @@ public abstract class AbstractClientPlayerMixin {
         // The attack layer fully hides the stance while active, so we start the stance
         // *during* the attack — when the attack ends, the stance shows through instantly
         // with no flash to the default pose.
-        boolean playingBowAttack = AnimationRegistry.isPlayingCustomAnimation(player, AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION);
+        boolean playingBowAttack = AnimationRegistry.isPlayingCustomAnimation(player, AnimationRegistry.BASIC_ATTACK_BOW);
 
         // Bow attack just started → ensure stance is playing underneath (hidden by higher-priority attack layer)
         if (playingBowAttack && !wasPlayingBowAttack) {

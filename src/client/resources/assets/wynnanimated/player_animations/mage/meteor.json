@@ -1,7 +1,7 @@
 {
-    "name": "spell_cast_alt",
+    "name": "meteor",
     "author": "Sweenus",
-    "description": "spell cast alt",
+    "description": "meteor",
     "emote":{
         "isLoop": "false",
         "returnTick": 2,

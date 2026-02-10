@@ -10,136 +10,76 @@ import net.sweenus.wynnanimated.client.AnimationRegistry;
 
 public class SpellCastHandler {
 
-    // ****************************************************************************
-// *                                                                      *
-// *                       SPELL DEFINITIONS                              *
-// *                      sourced from Wynntils                           *
-// ****************************************************************************
-
-// ****************************************************************************
-// *  Archer Class Spells:                                                  *
-// ****************************************************************************
-/* ARROW_STORM(ClassType.ARCHER, 1, "Arrow Storm", 6, 0),
-   ESCAPE(ClassType.ARCHER, 2, "Escape", 3, 0),
-   BOMB(ClassType.ARCHER, 3, "Arrow Bomb", 8, 0),
-   ARROW_SHIELD(ClassType.ARCHER, 4, "Arrow Shield", 8, 1), */
-
-// ****************************************************************************
-// *  Assassin Class Spells:                                               *
-// ****************************************************************************
-/* SPIN_ATTACK(ClassType.ASSASSIN, 1, "Spin Attack", 6, 0),
-   DASH(ClassType.ASSASSIN, 2, "Dash", 2, 0),
-   MULTI_HIT(ClassType.ASSASSIN, 3, "Multi Hit", 8, 0),
-   SMOKE_BOMB(ClassType.ASSASSIN, 4, "Smoke Bomb", 8, 0), */
-
-// ****************************************************************************
-// *  Warrior Class Spells:                                                *
-// ****************************************************************************
-/* BASH(ClassType.WARRIOR, 1, "Bash", 6, 0),
-   CHARGE(ClassType.WARRIOR, 2, "Charge", 4, 0),
-   UPPERCUT(ClassType.WARRIOR, 3, "Uppercut", 9, 0),
-   WAR_SCREAM(ClassType.WARRIOR, 4, "War Scream", 7, -1), */
-
-// ****************************************************************************
-// *  Mage Class Spells:                                                   *
-// ****************************************************************************
-/* HEAL(ClassType.MAGE, 1, "Heal", 8, -1),
-   TELEPORT(ClassType.MAGE, 2, "Teleport", 4, 0),
-   METEOR(ClassType.MAGE, 3, "Meteor", 8, 0),
-   ICE_SNAKE(ClassType.MAGE, 4, "Ice Snake", 6, -1), */
-
-// ****************************************************************************
-// *  Shaman Class Spells:                                                 *
-// ****************************************************************************
-/* TOTEM(ClassType.SHAMAN, 1, "Totem", 4, 0),
-   HAUL(ClassType.SHAMAN, 2, "Haul", 3, -1),
-   AURA(ClassType.SHAMAN, 3, "Aura", 8, 0),
-   UPROOT(ClassType.SHAMAN, 4, "Uproot", 6, 0), */
-
-// ****************************************************************************
-// *  Unspecified Spells:                                                  *
-// ****************************************************************************
-/* FIRST_SPELL(ClassType.NONE, 1, "1st Spell", 0, 0),
-   SECOND_SPELL(ClassType.NONE, 2, "2nd Spell", 0, 0),
-   THIRD_SPELL(ClassType.NONE, 3, "3rd Spell", 0, 0),
-   FOURTH_SPELL(ClassType.NONE, 4, "4th Spell", 0, 0); */
-
-// ****************************************************************************
-// *                                                                      *
-// *                       END OF SPELL DEFINITIONS                       *
-// *                                                                      *
-// ****************************************************************************
-
-
     public static void performSpellAnimation(String spellName) {
         if (!AnimationRegistry.isWynntilsLoaded()) return;
         AbstractClientPlayerEntity player = MinecraftClient.getInstance().player;
 
         switch (spellName) {
             case "Spin Attack":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPIN_ANIMATION, AnimationRegistry.SPIN_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SPIN_ATTACK_ANIMATION, AnimationRegistry.SPIN_ATTACK_SPEED);
                 break;
             case "Dash":
-                // No animation
+                AnimationRegistry.playAnimation(player, AnimationRegistry.DASH_ANIMATION, AnimationRegistry.DASH_SPEED);
                 break;
             case "Multi Hit":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.RANGED_SLASH_ANIMATION, AnimationRegistry.RANGED_SLASH_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.MULTI_HIT_ANIMATION, AnimationRegistry.MULTI_HIT_SPEED);
                 break;
             case "Smoke Bomb":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.THROW_ANIMATION, AnimationRegistry.THROW_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.SMOKE_BOMB_ANIMATION, AnimationRegistry.SMOKE_BOMB_SPEED);
                 break;
 
             case "Bash":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SLAM_ANIMATION, AnimationRegistry.SLAM_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.BASH_ANIMATION, AnimationRegistry.BASH_SPEED);
                 break;
             case "Charge":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ANIMATION, AnimationRegistry.SPELL_CAST_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.CHARGE_ANIMATION, AnimationRegistry.CHARGE_SPEED);
                 break;
             case "Uppercut":
                 AnimationRegistry.playAnimation(player, AnimationRegistry.UPPERCUT_ANIMATION, AnimationRegistry.UPPERCUT_SPEED);
                 break;
             case "War Scream":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.BATTLECRY_ANIMATION, AnimationRegistry.BATTLECRY_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.WAR_SCREAM_ANIMATION, AnimationRegistry.WAR_SCREAM_SPEED);
                 break;
 
             case "Arrow Storm":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.BOW_RAPIDFIRE_VERTICAL_ANIMATION, AnimationRegistry.BOW_RAPIDFIRE_VERTICAL_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.ARROW_STORM_ANIMATION, AnimationRegistry.ARROW_STORM_SPEED);
                 break;
             case "Escape":
-                // No animation
+                AnimationRegistry.playAnimation(player, AnimationRegistry.ESCAPE_ANIMATION, AnimationRegistry.ESCAPE_SPEED);
                 break;
             case "Arrow Bomb":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION, AnimationRegistry.BOW_SHOOT_HORIZONTAL_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.BOMB_ANIMATION, AnimationRegistry.BOMB_SPEED);
                 break;
             case "Arrow Shield":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ANIMATION, AnimationRegistry.SPELL_CAST_ALT_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.ARROW_SHIELD_ANIMATION, AnimationRegistry.ARROW_SHIELD_SPEED);
                 break;
 
             case "Heal":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_HEAL_ANIMATION, AnimationRegistry.SPELL_HEAL_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.HEAL_ANIMATION, AnimationRegistry.HEAL_SPEED);
                 break;
             case "Teleport":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ANIMATION, AnimationRegistry.SPELL_CAST_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.TELEPORT_ANIMATION, AnimationRegistry.TELEPORT_SPEED);
                 break;
             case "Meteor":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ALT_ANIMATION, AnimationRegistry.SPELL_CAST_ALT_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.METEOR_ANIMATION, AnimationRegistry.METEOR_SPEED);
                 break;
             case "Ice Snake":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_ICE_SNAKE_ANIMATION, AnimationRegistry.SPELL_ICE_SNAKE_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.ICE_SNAKE_ANIMATION, AnimationRegistry.ICE_SNAKE_SPEED);
                 break;
 
             case "Totem":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_ICE_SNAKE_ANIMATION, AnimationRegistry.SPELL_ICE_SNAKE_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.TOTEM_ANIMATION, AnimationRegistry.TOTEM_SPEED);
                 break;
             case "Haul":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_CAST_ANIMATION, AnimationRegistry.SPELL_CAST_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.HAUL_ANIMATION, AnimationRegistry.HAUL_SPEED);
                 break;
             case "Aura":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.SPELL_AURA_ANIMATION, AnimationRegistry.SPELL_AURA_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.AURA_ANIMATION, AnimationRegistry.AURA_SPEED);
                 break;
             case "Uproot":
-                AnimationRegistry.playAnimation(player, AnimationRegistry.BATTLECRY_ANIMATION, AnimationRegistry.BATTLECRY_SPEED);
+                AnimationRegistry.playAnimation(player, AnimationRegistry.UPROOT_ANIMATION, AnimationRegistry.UPROOT_SPEED);
                 break;
+
             default:
                 if (AnimationRegistry.debugMode) System.out.println("Unknown animation type: " + spellName);
         }
@@ -169,17 +109,17 @@ public class SpellCastHandler {
         Identifier animId;
         if (wynnClass != null) {
             animId = switch (wynnClass) {
-                case "Archer/Hunter" -> AnimationRegistry.BOW_SHOOT_VERTICAL_ANIMATION;
-                case "Warrior/Knight" -> AnimationRegistry.SWING_ANIMATION;
-                case "Mage/Dark Wizard" -> AnimationRegistry.SPELL_CAST_ANIMATION;
-                case "Assassin/Ninja" -> AnimationRegistry.ROGUE_SLASH_ANIMATION;
-                case "Shaman/Skyseer" -> AnimationRegistry.THROW_ANIMATION;
+                case "Archer/Hunter" -> AnimationRegistry.BASIC_ATTACK_BOW;
+                case "Warrior/Knight" -> AnimationRegistry.BASIC_ATTACK_SPEAR;
+                case "Mage/Dark Wizard" -> AnimationRegistry.BASIC_ATTACK_WAND;
+                case "Assassin/Ninja" -> AnimationRegistry.BASIC_ATTACK_DAGGER;
+                case "Shaman/Skyseer" -> AnimationRegistry.BASIC_ATTACK_RELIK;
                 default -> null;
-                };
-            } else {
+            };
+        } else {
             // Wynntils not loaded or class unknown - resolve from held weapon
-                    animId = WynnWeaponResolver.resolveAttackAnimation(player);
-            }
+            animId = WynnWeaponResolver.resolveAttackAnimation(player);
+        }
         if (animId == null) return false;
 
         int cooldownTicks = resolveCooldownTicks(stack);
@@ -190,8 +130,7 @@ public class SpellCastHandler {
             int elapsedTicks = Math.round((1.0f - progress) * cooldownTicks);
             if (elapsedTicks > EARLY_COOLDOWN_THRESHOLD) return false;
         }
-        if (AnimationRegistry.debugMode) System.out.println("class is: " + (wynnClass != null ? wynnClass : "inferred +from weapon"));
-
+        if (AnimationRegistry.debugMode) System.out.println("class is: " + (wynnClass != null ? wynnClass : "inferred from weapon"));
 
         // Don't restart if this animation is already playing (prevents stutter on fast cooldown weapons)
         if (AnimationRegistry.isPlayingCustomAnimation(player, animId)) return true;
@@ -272,7 +211,5 @@ public class SpellCastHandler {
 
         return cooldownTicks;
     }
-
-
 
 }

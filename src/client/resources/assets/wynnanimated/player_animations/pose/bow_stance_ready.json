@@ -1,7 +1,7 @@
 {
-    "name": "bow_shoot_vertical_ease_ready",
+    "name": "bow_stance_ready",
     "author": "Sweenus",
-    "description": "Ranged fire",
+    "description": "bow_stance_ready",
     "emote":{
         "isLoop": "true",
         "returnTick": 1,

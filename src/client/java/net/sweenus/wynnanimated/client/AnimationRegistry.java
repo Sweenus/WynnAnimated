@@ -15,11 +15,8 @@ import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.sound.SoundManager;
 import net.minecraft.util.Identifier;
 import net.sweenus.wynnanimated.client.util.CustomSoundListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.WeakHashMap;
@@ -28,55 +25,67 @@ public class AnimationRegistry {
     public static final String MOD_ID = WynnanimatedClient.MOD_ID;
     public static final String WYNNTILS_MOD_ID = WynnanimatedClient.WYNNTILS_MOD_ID;
 
-    public static final Identifier SPIN_ANIMATION = Identifier.of(MOD_ID, "spin");
-    public static final float SPIN_SPEED = 2.5f;
-    public static final Identifier SPIN_LONG_ANIMATION = Identifier.of(MOD_ID, "spin_long");
-    public static final float SPIN_LONG_SPEED = 2.5f;
-    public static final Identifier THROW_ANIMATION = Identifier.of(MOD_ID, "throw");
-    public static final float THROW_SPEED = 1.9f;
-    public static final Identifier RANGED_SLASH_ANIMATION = Identifier.of(MOD_ID, "ranged_slash");
-    public static final float RANGED_SLASH_SPEED = 2.1f;
-    public static final Identifier SLAM_ANIMATION = Identifier.of(MOD_ID, "two_handed_slam");
-    public static final float SLAM_SPEED = 2.1f;
-    public static final Identifier UP_SLASH_ANIMATION = Identifier.of(MOD_ID, "up_slash");
-    public static final float UP_SLASH_SPEED = 1.4f;
-    public static final Identifier GROUND_CLEAVE_ANIMATION = Identifier.of(MOD_ID, "ground_cleave");
-    public static final float GROUND_CLEAVE_SPEED = 2.1f;
-    public static final Identifier BATTLECRY_ANIMATION = Identifier.of(MOD_ID, "battlecry");
-    public static final float BATTLECRY_SPEED = 1.5f;
+    // Archer Class Spells
+    public static final Identifier ARROW_STORM_ANIMATION = Identifier.of(MOD_ID, "arrow_storm");
+    public static final float ARROW_STORM_SPEED = 2.5f;
+    public static final Identifier ESCAPE_ANIMATION = Identifier.of(MOD_ID, "escape");
+    public static final float ESCAPE_SPEED = 1.5f;
+    public static final Identifier BOMB_ANIMATION = Identifier.of(MOD_ID, "arrow_bomb");
+    public static final float BOMB_SPEED = 2.0f;
+    public static final Identifier ARROW_SHIELD_ANIMATION = Identifier.of(MOD_ID, "arrow_shield");
+    public static final float ARROW_SHIELD_SPEED = 1.6f;
+
+    // Assassin Class Spells
+    public static final Identifier SPIN_ATTACK_ANIMATION = Identifier.of(MOD_ID, "spin_attack");
+    public static final float SPIN_ATTACK_SPEED = 2.5f;
+    public static final Identifier DASH_ANIMATION = Identifier.of(MOD_ID, "dash");
+    public static final float DASH_SPEED = 1.8f;
+    public static final Identifier MULTI_HIT_ANIMATION = Identifier.of(MOD_ID, "multi_hit");
+    public static final float MULTI_HIT_SPEED = 2.1f;
+    public static final Identifier SMOKE_BOMB_ANIMATION = Identifier.of(MOD_ID, "smoke_bomb");
+    public static final float SMOKE_BOMB_SPEED = 1.9f;
+
+    // Warrior Class Spells
+    public static final Identifier BASH_ANIMATION = Identifier.of(MOD_ID, "bash");
+    public static final float BASH_SPEED = 2.1f;
+    public static final Identifier CHARGE_ANIMATION = Identifier.of(MOD_ID, "charge");
+    public static final float CHARGE_SPEED = 1.4f;
+    public static final Identifier WAR_SCREAM_ANIMATION = Identifier.of(MOD_ID, "war_scream");
+    public static final float WAR_SCREAM_SPEED = 2.3f;
     public static final Identifier UPPERCUT_ANIMATION = Identifier.of(MOD_ID, "uppercut");
     public static final float UPPERCUT_SPEED = 1.8f;
-    public static final Identifier SPELL_CAST_ANIMATION = Identifier.of(MOD_ID, "spell_cast");
-    public static final float SPELL_CAST_SPEED = 1.0f;
-    public static final Identifier SPELL_CAST_ALT_ANIMATION = Identifier.of(MOD_ID, "spell_cast_alt");
-    public static final float SPELL_CAST_ALT_SPEED = 1.6f;
-    public static final Identifier SPELL_ICE_SNAKE_ANIMATION = Identifier.of(MOD_ID, "spell_ice_snake");
-    public static final float SPELL_ICE_SNAKE_SPEED = 1.9f;
-    public static final Identifier SPELL_HEAL_ANIMATION = Identifier.of(MOD_ID, "spell_heal");
-    public static final float SPELL_HEAL_SPEED = 1.2f;
-    public static final Identifier SPELL_AURA_ANIMATION = Identifier.of(MOD_ID, "spell_aura");
-    public static final float SPELL_AURA_SPEED = 1.0f;
 
+    // Mage Class Spells
+    public static final Identifier HEAL_ANIMATION = Identifier.of(MOD_ID, "heal");
+    public static final float HEAL_SPEED = 1.5f;
+    public static final Identifier TELEPORT_ANIMATION = Identifier.of(MOD_ID, "teleport");
+    public static final float TELEPORT_SPEED = 2.0f;
+    public static final Identifier METEOR_ANIMATION = Identifier.of(MOD_ID, "meteor");
+    public static final float METEOR_SPEED = 1.8f;
+    public static final Identifier ICE_SNAKE_ANIMATION = Identifier.of(MOD_ID, "ice_snake");
+    public static final float ICE_SNAKE_SPEED = 1.9f;
 
-    public static final Identifier BOW_SHOOT_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_horizontal");
-    public static final Identifier BOW_RAPIDFIRE_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_rapidfire_vertical");
-    public static final float BOW_RAPIDFIRE_VERTICAL_SPEED = 2.5f;
-    public static final float BOW_SHOOT_HORIZONTAL_SPEED = 1.2f;
-    public static final Identifier BOW_SHOOT_VERTICAL_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_vertical_ease");
-    public static final Identifier BOW_STANCE_READY_ANIMATION = Identifier.of(MOD_ID, "bow_shoot_vertical_ease_ready");
+    // Shaman Class Spells
+    public static final Identifier TOTEM_ANIMATION = Identifier.of(MOD_ID, "totem");
+    public static final float TOTEM_SPEED = 2.5f;
+    public static final Identifier HAUL_ANIMATION = Identifier.of(MOD_ID, "haul");
+    public static final float HAUL_SPEED = 1.8f;
+    public static final Identifier UPROOT_ANIMATION = Identifier.of(MOD_ID, "uproot");
+    public static final float UPROOT_SPEED = 2.0f;
+    public static final Identifier AURA_ANIMATION = Identifier.of(MOD_ID, "aura");
+    public static final float AURA_SPEED = 1.0f;
+
+    // Basic Attacks
+    public static final Identifier BASIC_ATTACK_BOW = Identifier.of(MOD_ID, "basic_attack_bow");
+    public static final Identifier BASIC_ATTACK_SPEAR = Identifier.of(MOD_ID, "basic_attack_spear");
+    public static final Identifier BASIC_ATTACK_WAND = Identifier.of(MOD_ID, "basic_attack_wand");
+    public static final Identifier BASIC_ATTACK_DAGGER = Identifier.of(MOD_ID, "basic_attack_dagger");
+    public static final Identifier BASIC_ATTACK_RELIK = Identifier.of(MOD_ID, "basic_attack_relik");
+
+    // Pose
+    public static final Identifier BOW_STANCE_READY_ANIMATION = Identifier.of(MOD_ID, "bow_stance_ready");
     public static final float BOW_STANCE_READY_SPEED = 1.0f;
-    public static final Identifier SLASH_RIGHT_ANIMATION = Identifier.of(MOD_ID, "slash_right");
-    public static final float SLASH_RIGHT_SPEED = 1.0f;
-    public static final Identifier SLASH_LEFT_ANIMATION = Identifier.of(MOD_ID, "slash_left");
-    public static final float SLASH_LEFT_SPEED = 1.0f;
-    public static final Identifier SWING_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing_slow");
-    public static final float SWING_SPEED = 1.0f;
-    public static final float THROW_SHAMAN_SPEED = 1.2f;
-    public static final Identifier ROGUE_SLASH_ANIMATION = Identifier.of(MOD_ID, "rogue_slash");
 
-
-    public static final Identifier TEST_ANIMATION = Identifier.of(MOD_ID, "two_handed_swing");
-    public static final float TEST_SPEED = 1.2f;
 
     public static List<Identifier> basicAttackList = new ArrayList<>();
 
@@ -86,75 +95,37 @@ public class AnimationRegistry {
     public static final CustomSoundListener soundListener = new CustomSoundListener();
 
     public static void registerAnimations() {
+        // Register ability animations
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ARROW_STORM_ANIMATION,       10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ESCAPE_ANIMATION,            10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOMB_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ARROW_SHIELD_ANIMATION,      10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPIN_ATTACK_ANIMATION,       10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(DASH_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(MULTI_HIT_ANIMATION,         10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SMOKE_BOMB_ANIMATION,        10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASH_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(CHARGE_ANIMATION,            10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPPERCUT_ANIMATION,          10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(WAR_SCREAM_ANIMATION,        10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(HEAL_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TELEPORT_ANIMATION,          10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(METEOR_ANIMATION,            10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ICE_SNAKE_ANIMATION,         10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TOTEM_ANIMATION,             10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(HAUL_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPROOT_ANIMATION,            10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(AURA_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPIN_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        // Register basic attack animations
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_RELIK,          9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_BOW,            9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_SPEAR,          9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_DAGGER,         9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_WAND,           9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPIN_LONG_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(THROW_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(RANGED_SLASH_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SLAM_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UP_SLASH_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(GROUND_CLEAVE_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_SHOOT_ANIMATION, 9,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_RAPIDFIRE_VERTICAL_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_SHOOT_VERTICAL_ANIMATION, 9,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SLASH_RIGHT_ANIMATION, 9,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SLASH_LEFT_ANIMATION, 9,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BATTLECRY_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SWING_ANIMATION, 9,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TEST_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ROGUE_SLASH_ANIMATION, 9,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_CAST_ANIMATION, 9,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_CAST_ALT_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_ICE_SNAKE_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_HEAL_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPELL_AURA_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPPERCUT_ANIMATION, 10,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_STANCE_READY_ANIMATION, 8,
-                (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        // Register pose animations
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_STANCE_READY_ANIMATION,  8, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
         if (debugMode) System.out.println("Registered WynnAnimated animations");
     }
@@ -225,11 +196,11 @@ public class AnimationRegistry {
     }
 
     public static void createLists() {
-        basicAttackList.add(SWING_ANIMATION);
-        basicAttackList.add(BOW_SHOOT_ANIMATION);
-        basicAttackList.add(SLASH_LEFT_ANIMATION);
-        basicAttackList.add(SLASH_RIGHT_ANIMATION);
-        basicAttackList.add(THROW_ANIMATION);
+        basicAttackList.add(BASIC_ATTACK_SPEAR);
+        basicAttackList.add(BASIC_ATTACK_BOW);
+        basicAttackList.add(BASIC_ATTACK_DAGGER);
+        basicAttackList.add(BASIC_ATTACK_WAND);
+        basicAttackList.add(BASIC_ATTACK_RELIK);
     }
 
     public static boolean isPlayingAnyAnimation(AbstractClientPlayerEntity player, List<Identifier> list) {
