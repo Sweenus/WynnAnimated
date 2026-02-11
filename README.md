@@ -26,5 +26,6 @@ Attack animations can look strange when the character is looking up or down in f
 ## Known Issues
 
 ### Iris Shader Incompatibility
-When shaders are enabled, the player model will fully render in first-person mode during attack animations, obscuring the screen. 
-This incompatibility between Player Animator and Iris can only be resolved when development moves to Minecraft 1.21.11+.
+~~When shaders are enabled, the player model will fully render in first-person mode during attack animations, obscuring the screen. 
+This incompatibility between Player Animator and Iris can only be resolved when development moves to Minecraft 1.21.11+.~~
+Shaders are compatible in 1.21.11 versions of the mod
