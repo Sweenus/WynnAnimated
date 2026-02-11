@@ -13,6 +13,9 @@ import java.util.Set;
 
 public class CameraArmPitchModifier extends AbstractModifier {
     private static final float PITCH_MULTIPLIER = 1.0f;
+    private static final float PITCH_DOWN_START_DEGREES = 10.0f;
+    private static final float MAX_PITCH_DOWN_DEGREES = 90.0f;
+    private static final float MAX_FORWARD_OFFSET = 9.0f;
     private static final Set<String> IGNORE_ANIMATIONS = Set.of(
             "basic_attack_spear",
             "bash"
@@ -27,7 +30,8 @@ public class CameraArmPitchModifier extends AbstractModifier {
 
         if (!(getController() instanceof PlayerAnimationController controller)) return transformed;
         if (!(controller.getAvatar() instanceof AbstractClientPlayerEntity avatar)) return transformed;
-        if (client.options.getPerspective() == Perspective.FIRST_PERSON && avatar != client.player) return transformed;
+        boolean isFirstPerson = client.options.getPerspective() == Perspective.FIRST_PERSON;
+        if (isFirstPerson && avatar != client.player) return transformed;
 
         Animation current = controller.getCurrentAnimationInstance();
         if (current != null && IGNORE_ANIMATIONS.contains(current.getNameOrId())) {
@@ -37,8 +41,19 @@ public class CameraArmPitchModifier extends AbstractModifier {
         String name = transformed.getName();
         if (!isArmBone(name)) return transformed;
 
-        float pitchRad = avatar.getPitch() * MathHelper.RADIANS_PER_DEGREE;
+        float pitchDeg = avatar.getPitch();
+        float pitchRad = pitchDeg * MathHelper.RADIANS_PER_DEGREE;
         transformed.addRot(pitchRad * PITCH_MULTIPLIER, 0.0f, 0.0f);
+
+        if (isFirstPerson) {
+            float clamped = MathHelper.clamp(pitchDeg, PITCH_DOWN_START_DEGREES, MAX_PITCH_DOWN_DEGREES);
+            if (clamped > PITCH_DOWN_START_DEGREES) {
+                float t = (clamped - PITCH_DOWN_START_DEGREES) / (MAX_PITCH_DOWN_DEGREES - PITCH_DOWN_START_DEGREES);
+                float forwardOffset = MAX_FORWARD_OFFSET * t;
+                // Move arms toward the camera in first person when looking down.
+                transformed.addPos(0.0f, 0.0f, forwardOffset);
+            }
+        }
         return transformed;
     }
 
