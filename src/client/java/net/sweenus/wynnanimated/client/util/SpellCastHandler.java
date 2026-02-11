@@ -1,7 +1,7 @@
 package net.sweenus.wynnanimated.client.util;
 
-import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
+import com.zigythebird.playeranim.animation.PlayerAnimResources;
+import com.zigythebird.playeranimcore.animation.Animation;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -122,7 +122,7 @@ public class SpellCastHandler {
 
         if (animId == null) {
             // Wynntils unavailable — try API
-            String apiClass = WynnPlayerClassCache.getPlayerClass(player.getGameProfile().getName());
+            String apiClass = WynnPlayerClassCache.getPlayerClass(player.getGameProfile().name());
             if (apiClass != null) {
                 wynnClass = apiClass;
                 source = "API";
@@ -151,8 +151,8 @@ public class SpellCastHandler {
         if (AnimationRegistry.isPlayingCustomAnimation(player, animId)) return true;
 
         // Get animation's full duration (stopTick, not endTick, to include the return-to-rest phase)
-        KeyframeAnimation anim = (KeyframeAnimation) PlayerAnimationRegistry.getAnimation(animId);
-        int animDuration = (anim != null) ? anim.getLength() : 0;
+        Animation anim = PlayerAnimResources.getAnimation(animId);
+        int animDuration = (anim != null) ? Math.round(anim.length()) : 0;
 
         AttackTracker.lastAnimationTick = player.age;
 

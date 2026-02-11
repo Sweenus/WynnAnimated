@@ -1,17 +1,16 @@
 package net.sweenus.wynnanimated.client;
 
-import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
-import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
-import dev.kosmx.playerAnim.api.layered.IAnimation;
-import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
-import dev.kosmx.playerAnim.api.layered.ModifierLayer;
-import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
-import dev.kosmx.playerAnim.api.layered.modifier.SpeedModifier;
-import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
-import dev.kosmx.playerAnim.core.util.Ease;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
+import com.zigythebird.playeranim.animation.PlayerAnimResources;
+import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranim.api.PlayerAnimationAccess;
+import com.zigythebird.playeranim.api.PlayerAnimationFactory;
+import com.zigythebird.playeranimcore.animation.Animation;
+import com.zigythebird.playeranimcore.animation.layered.modifier.AbstractFadeModifier;
+import com.zigythebird.playeranimcore.animation.layered.modifier.SpeedModifier;
+import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
+import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
+import com.zigythebird.playeranimcore.easing.EasingType;
+import com.zigythebird.playeranimcore.enums.PlayState;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -97,36 +96,36 @@ public class AnimationRegistry {
 
     public static void registerAnimations() {
         // Register ability animations
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ARROW_STORM_ANIMATION,       10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ESCAPE_ANIMATION,            10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOMB_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ARROW_SHIELD_ANIMATION,      10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPIN_ATTACK_ANIMATION,       10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(DASH_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(MULTI_HIT_ANIMATION,         10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SMOKE_BOMB_ANIMATION,        10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASH_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(CHARGE_ANIMATION,            10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPPERCUT_ANIMATION,          10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(WAR_SCREAM_ANIMATION,        10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(HEAL_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TELEPORT_ANIMATION,          10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(METEOR_ANIMATION,            10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ICE_SNAKE_ANIMATION,         10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TOTEM_ANIMATION,             10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(HAUL_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPROOT_ANIMATION,            10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(AURA_ANIMATION,              10, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ARROW_STORM_ANIMATION,       10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ESCAPE_ANIMATION,            10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOMB_ANIMATION,              10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ARROW_SHIELD_ANIMATION,      10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SPIN_ATTACK_ANIMATION,       10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(DASH_ANIMATION,              10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(MULTI_HIT_ANIMATION,         10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(SMOKE_BOMB_ANIMATION,        10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASH_ANIMATION,              10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(CHARGE_ANIMATION,            10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPPERCUT_ANIMATION,          10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(WAR_SCREAM_ANIMATION,        10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(HEAL_ANIMATION,              10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TELEPORT_ANIMATION,          10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(METEOR_ANIMATION,            10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ICE_SNAKE_ANIMATION,         10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(TOTEM_ANIMATION,             10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(HAUL_ANIMATION,              10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(UPROOT_ANIMATION,            10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(AURA_ANIMATION,              10, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
 
         // Register basic attack animations
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_RELIK,          9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_BOW,            9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_SPEAR,          9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_DAGGER,         9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_WAND,           9, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_RELIK,          9, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_BOW,            9, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_SPEAR,          9, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_DAGGER,         9, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BASIC_ATTACK_WAND,           9, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
 
         // Register pose animations
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_STANCE_READY_ANIMATION,  8, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_STANCE_READY_ANIMATION,  8, (player) -> new PlayerAnimationController(player, (controller, state, animSetter) -> PlayState.STOP));
 
         if (debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Registered WynnAnimated animations");
     }
@@ -135,15 +134,15 @@ public class AnimationRegistry {
     public static int lastAnimationPlayedTick = Integer.MIN_VALUE;
 
     public static void playAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation, float speedValue) {
-        var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
-        if (animation != null) {
+        var controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(player, selectedAnimation);
+        if (controller != null) {
             Map<Identifier, SpeedModifier> speedMods = playerSpeedModifiers.computeIfAbsent(player, k -> new HashMap<>());
 
             SpeedModifier speedMod = speedMods.get(selectedAnimation);
 
             if (speedMod == null) {
                 speedMod = new SpeedModifier(speedValue);
-                animation.addModifier(speedMod, 0);
+                controller.addModifier(speedMod, 0);
                 speedMods.put(selectedAnimation, speedMod);
             } else {
                 speedMod.speed = speedValue;
@@ -155,10 +154,18 @@ public class AnimationRegistry {
                 lastAnimationPlayedTick = player.age;
             }
 
-            animation.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(2, Ease.INOUTSINE),
-                    new KeyframeAnimationPlayer((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(selectedAnimation))
-                            .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL)
-                            .setFirstPersonConfiguration(firstPersonConfiguration), true);
+            Animation anim = PlayerAnimResources.getAnimation(selectedAnimation);
+            if (anim == null) {
+                if (debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Failed to locate animation");
+                return;
+            }
+            controller.setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL);
+            controller.setFirstPersonConfiguration(firstPersonConfiguration);
+            controller.replaceAnimationWithFade(
+                    AbstractFadeModifier.standardFadeIn(2, EasingType.EASE_IN_OUT_SINE),
+                    anim,
+                    true
+            );
         } else {
             if (debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Failed to locate animation");
         }
@@ -175,25 +182,25 @@ public class AnimationRegistry {
     }
 
     public static void stopAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation) {
-        var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
-        if (animation == null) return;
-
-        var layer = ((KeyframeAnimationPlayer)animation.getAnimation());
-        if (layer != null && layer.getData().getName().equals(selectedAnimation))
-            layer.stop();
+        var controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(player, selectedAnimation);
+        if (controller == null) return;
+        controller.stop();
     }
 
     public static void fadeOutAnimation(AbstractClientPlayerEntity player, Identifier selectedAnimation, int fadeTicks) {
-        var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(selectedAnimation);
-        if (animation != null && animation.isActive()) {
-            animation.replaceAnimationWithFade(
-                    AbstractFadeModifier.standardFadeIn(fadeTicks, Ease.INOUTSINE), null, true);
+        var controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(player, selectedAnimation);
+        if (controller != null && controller.isActive()) {
+            controller.replaceAnimationWithFade(
+                    AbstractFadeModifier.standardFadeIn(fadeTicks, EasingType.EASE_IN_OUT_SINE),
+                    (Animation) null,
+                    true
+            );
         }
     }
 
     public static boolean isPlayingCustomAnimation(AbstractClientPlayerEntity player, Identifier animation) {
-        var anim = PlayerAnimationAccess.getPlayerAssociatedData(player).get(animation);
-        return anim != null && anim.isActive();
+        var controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(player, animation);
+        return controller != null && controller.isActive();
     }
 
     public static void createLists() {
@@ -206,8 +213,8 @@ public class AnimationRegistry {
 
     public static boolean isPlayingAnyAnimation(AbstractClientPlayerEntity player, List<Identifier> list) {
         for (Identifier identifier : list) {
-            var anim = PlayerAnimationAccess.getPlayerAssociatedData(player).get(identifier);
-            if (anim != null && anim.isActive()) return true;
+            var controller = (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(player, identifier);
+            if (controller != null && controller.isActive()) return true;
         }
         return false;
     }

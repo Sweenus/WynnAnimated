@@ -63,7 +63,7 @@ public class LivingEntityMixin {
                 && mc.player != null
                 && getPlayerAnimations()
                 && otherPlayer.squaredDistanceTo(mc.player) <= getAnimationRangeSq()) {
-            String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
+            String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().name());
             if (classType != null) {
                 Identifier animId = WynnWeaponResolver.resolveAttackAnimationFromClass(classType);
                 if (animId != null && !AnimationRegistry.isPlayingCustomAnimation(otherPlayer, animId)) {
@@ -89,7 +89,7 @@ public class LivingEntityMixin {
             //if (AnimationRegistry.debugMode)
                 //System.out.println(WynnanimatedClient.LOG_ID + " Detected bow shoot sound from " + otherPlayer.getDisplayName() + "'s position");
 
-            String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
+            String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().name());
             if ("ARCHER".equals(classType)) {
                 Identifier animId = AnimationRegistry.BASIC_ATTACK_BOW;
                 if (!AnimationRegistry.isPlayingCustomAnimation(otherPlayer, animId)) {

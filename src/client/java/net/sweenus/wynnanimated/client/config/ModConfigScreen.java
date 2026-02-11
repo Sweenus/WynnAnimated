@@ -124,8 +124,11 @@ public class ModConfigScreen extends Screen {
         }
 
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, label, x + entryWidth / 2, y + 6, 0xFFFF55);
+        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            int x = getContentX();
+            int entryWidth = getContentWidth();
+            int textY = getContentY() + 6;
+            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, label, x + entryWidth / 2, textY, 0xFFFF55);
         }
 
         @Override
@@ -151,9 +154,9 @@ public class ModConfigScreen extends Screen {
         }
 
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            button.setX(x);
-            button.setY(y);
+        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            button.setX(getContentX());
+            button.setY(getContentY());
             button.render(context, mouseX, mouseY, tickDelta);
         }
 
@@ -180,9 +183,9 @@ public class ModConfigScreen extends Screen {
         }
 
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            slider.setX(x);
-            slider.setY(y);
+        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            slider.setX(getContentX());
+            slider.setY(getContentY());
             slider.render(context, mouseX, mouseY, tickDelta);
         }
 
@@ -207,9 +210,9 @@ public class ModConfigScreen extends Screen {
         }
 
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            slider.setX(x);
-            slider.setY(y);
+        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            slider.setX(getContentX());
+            slider.setY(getContentY());
             slider.render(context, mouseX, mouseY, tickDelta);
         }
 

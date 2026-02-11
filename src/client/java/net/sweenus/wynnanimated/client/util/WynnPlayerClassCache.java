@@ -235,9 +235,9 @@ public final class WynnPlayerClassCache {
      * Extracts the Minecraft username from a PlayerEntity.
      */
     private static String getUsernameFromPlayer(PlayerEntity player) {
-        if (player == null || player.getGameProfile() == null || player.getGameProfile().getName() == null) {
+        if (player == null || player.getGameProfile() == null || player.getGameProfile().name() == null) {
             return null;
         }
-        return player.getGameProfile().getName();
+        return player.getGameProfile().name();
     }
 }

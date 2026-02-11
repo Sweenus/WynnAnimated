@@ -33,9 +33,10 @@ fabricApi {
 }
 
 repositories {
+    mavenCentral()
     maven {
-        name = "KosmX's Maven"
-        url = 'https://maven.kosmx.dev/'
+        name = "Redlance"
+        url = "https://repo.redlance.org/public"
     }
     maven {
         name = "Terraformers"
@@ -51,9 +52,9 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim}")
+    modImplementation("com.zigythebird.playeranim:PlayerAnimationLibFabric:${project.pal_version}")
 
-    modImplementation("com.terraformersmc:modmenu:13.0.3")
+    modImplementation("com.terraformersmc:modmenu:17.0.0-beta.2")
 }
 
 processResources {
