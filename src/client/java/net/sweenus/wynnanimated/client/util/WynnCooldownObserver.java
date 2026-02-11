@@ -3,6 +3,7 @@ package net.sweenus.wynnanimated.client.util;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.sweenus.wynnanimated.client.AnimationRegistry;
+import net.sweenus.wynnanimated.client.WynnanimatedClient;
 
 public final class WynnCooldownObserver {
 
@@ -28,7 +29,7 @@ public final class WynnCooldownObserver {
             int duration = player.age - cooldownStartTick;
             if (duration > 0) {
                 WynnCooldownCache.put(cooldownStack, duration);
-                if (AnimationRegistry.debugMode) System.out.println("WynnCooldownObserver: measured cooldown = " + duration + " ticks");
+                if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " WynnCooldownObserver: measured cooldown = " + duration + " ticks");
             }
             cooldownStartTick = -1;
         }

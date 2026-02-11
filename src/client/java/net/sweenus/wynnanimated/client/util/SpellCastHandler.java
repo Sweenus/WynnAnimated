@@ -7,6 +7,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.sweenus.wynnanimated.client.AnimationRegistry;
+import net.sweenus.wynnanimated.client.WynnanimatedClient;
 
 public class SpellCastHandler {
 
@@ -81,7 +82,7 @@ public class SpellCastHandler {
                 break;
 
             default:
-                if (AnimationRegistry.debugMode) System.out.println("Unknown animation type: " + spellName);
+                if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Unknown animation type: " + spellName);
         }
 
     }
@@ -130,7 +131,7 @@ public class SpellCastHandler {
             int elapsedTicks = Math.round((1.0f - progress) * cooldownTicks);
             if (elapsedTicks > EARLY_COOLDOWN_THRESHOLD) return false;
         }
-        if (AnimationRegistry.debugMode) System.out.println("class is: " + (wynnClass != null ? wynnClass : "inferred from weapon"));
+        if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " class is: " + (wynnClass != null ? wynnClass : "inferred from weapon"));
 
         // Don't restart if this animation is already playing (prevents stutter on fast cooldown weapons)
         if (AnimationRegistry.isPlayingCustomAnimation(player, animId)) return true;
@@ -146,7 +147,7 @@ public class SpellCastHandler {
             float speed = Math.min((float) animDuration / cooldownTicks, MAX_ANIMATION_SPEED);
             AnimationRegistry.playAnimation(player, animId, speed);
             activeAttackAnimId = null;
-            if (AnimationRegistry.debugMode) System.out.println("Performing attack animation for " + wynnClass
+            if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks + ", speed: " + speed);
         } else if (animDuration > 0 && animDuration < cooldownTicks) {
             // Animation is shorter than cooldown - normal speed then slow tail
@@ -158,14 +159,14 @@ public class SpellCastHandler {
             int tailGameTicks = cooldownTicks - normalPhaseTicks;
             slowPhaseSpeed = (float) tailAnimTicks / tailGameTicks;
             totalPacingTicks = cooldownTicks;
-            if (AnimationRegistry.debugMode) System.out.println("Performing attack animation for " + wynnClass
+            if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks
                     + ", normalPhase: " + normalPhaseTicks + " ticks, slowPhase speed: " + slowPhaseSpeed);
         } else {
             // Animation matches cooldown exactly (or duration unknown) - play at normal speed
             AnimationRegistry.playAnimation(player, animId, 1.0f);
             activeAttackAnimId = null;
-            if (AnimationRegistry.debugMode) System.out.println("Performing attack animation for " + wynnClass
+            if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Performing attack animation for " + wynnClass
                     + " | duration: " + animDuration + ", cooldown: " + cooldownTicks + ", speed: 1.0");
         }
 
@@ -192,21 +193,21 @@ public class SpellCastHandler {
 
         if (useCooldownObserver) {
             cooldownTicks = WynnCooldownCache.get(stack);
-            if (AnimationRegistry.debugMode) System.out.println("Using cooldown observer: " + cooldownTicks + " ticks");
+            if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Using cooldown observer: " + cooldownTicks + " ticks");
         } else {
             cooldownTicks = WynnAttackSpeedResolver.resolveCooldownFromLore(stack);
 
             if (cooldownTicks < 0) {
                 cooldownTicks = WynnCooldownCache.get(stack);
-                if (AnimationRegistry.debugMode) System.out.println("Lore resolver failed, falling back to cache: " + cooldownTicks + " ticks");
+                if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Lore resolver failed, falling back to cache: " + cooldownTicks + " ticks");
             } else {
-                if (AnimationRegistry.debugMode) System.out.println("Using lore resolver: " + cooldownTicks + " ticks");
+                if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Using lore resolver: " + cooldownTicks + " ticks");
             }
         }
 
         if (cooldownTicks < 0) {
             cooldownTicks = 15; // safe fallback
-            if (AnimationRegistry.debugMode) System.out.println("Both methods failed, using fallback: " + cooldownTicks + " ticks");
+            if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Both methods failed, using fallback: " + cooldownTicks + " ticks");
         }
 
         return cooldownTicks;

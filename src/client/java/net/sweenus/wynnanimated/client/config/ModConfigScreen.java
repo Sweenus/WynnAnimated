@@ -33,6 +33,7 @@ public class ModConfigScreen extends Screen {
         list.addEntry(new BooleanEntry("Debug Mode", () -> ModConfig.get().debugMode, v -> ModConfig.get().debugMode = v));
         list.addEntry(new BooleanEntry("Show Arms (1st Person)", () -> ModConfig.get().showArms, v -> ModConfig.get().showArms = v));
         list.addEntry(new IntSliderEntry("Animation Range", 5, 50, () -> ModConfig.get().animationRange, v -> ModConfig.get().animationRange = v));
+        list.addEntry(new IntSliderEntry("Rate Limit (Player Cache)", 5, 60, () -> ModConfig.get().rateLimit, v -> ModConfig.get().rateLimit = v));
         list.addEntry(new IntSliderEntry("Stance Timeout (ticks)", 10, 100, () -> ModConfig.get().stanceTimeoutTicks, v -> ModConfig.get().stanceTimeoutTicks = v));
 
         // Archer spells

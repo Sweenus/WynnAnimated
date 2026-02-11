@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.sweenus.wynnanimated.client.AnimationRegistry;
+import net.sweenus.wynnanimated.client.WynnanimatedClient;
 import net.sweenus.wynnanimated.client.config.ModConfig;
 import net.sweenus.wynnanimated.client.util.AttackTracker;
 import net.sweenus.wynnanimated.client.util.WynnPlayerClassCache;
@@ -68,7 +69,7 @@ public class LivingEntityMixin {
                 Identifier.of("minecraft", "entity.splash_potion.throw"),
                 otherPlayer.getX(), otherPlayer.getY(), otherPlayer.getZ())) {
             if (AnimationRegistry.debugMode)
-                System.out.println("Detected bow shoot sound from " + otherPlayer.getDisplayName() + "'s position");
+                System.out.println(WynnanimatedClient.LOG_ID + " Detected bow shoot sound from " + otherPlayer.getDisplayName() + "'s position");
 
             String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
             if ("ARCHER".equals(classType)) {

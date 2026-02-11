@@ -14,7 +14,7 @@ public final class WynntilsCompat {
     public static @Nullable String getPlayerClass() {
         if (!AnimationRegistry.isWynntilsLoaded()) return null;
 
-        //System.out.println("fetching Wynntils class");
+        //System.out.println(WynnanimatedClient.LOG_ID + " fetching Wynntils class");
         try {
             // Load Models class
             Class<?> modelsClass =
@@ -33,7 +33,7 @@ public final class WynntilsCompat {
 
             Object classTypeEnum = getClassTypeMethod.invoke(characterModel);
 
-            //System.out.println("Class found: " + classTypeEnum.toString());
+            //System.out.println(WynnanimatedClient.LOG_ID + " Class found: " + classTypeEnum.toString());
             return classTypeEnum != null ? classTypeEnum.toString() : null;
         } catch (Throwable t) {
             return null;

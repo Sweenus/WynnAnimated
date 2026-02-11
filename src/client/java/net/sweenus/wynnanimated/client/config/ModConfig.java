@@ -3,6 +3,7 @@ package net.sweenus.wynnanimated.client.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
+import net.sweenus.wynnanimated.client.WynnanimatedClient;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ public class ModConfig {
     public boolean debugMode = false;
     public boolean showArms = true;
     public int animationRange = 20;
+    public int rateLimit = 40;
     public int stanceTimeoutTicks = 40;
 
     // Archer spell speeds
@@ -65,7 +67,7 @@ public class ModConfig {
                     INSTANCE = new ModConfig();
                 }
             } catch (IOException e) {
-                System.err.println("[WynnAnimated] Failed to load config: " + e.getMessage());
+                System.err.println(WynnanimatedClient.LOG_ID + " Failed to load config: " + e.getMessage());
                 INSTANCE = new ModConfig();
             }
         } else {
@@ -79,7 +81,7 @@ public class ModConfig {
         try {
             Files.writeString(configPath, GSON.toJson(INSTANCE));
         } catch (IOException e) {
-            System.err.println("[WynnAnimated] Failed to save config: " + e.getMessage());
+            System.err.println(WynnanimatedClient.LOG_ID + " Failed to save config: " + e.getMessage());
         }
     }
 }

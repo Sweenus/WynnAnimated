@@ -3,6 +3,8 @@ package net.sweenus.wynnanimated.client.util;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.sweenus.wynnanimated.client.AnimationRegistry;
+import net.sweenus.wynnanimated.client.WynnanimatedClient;
+import net.sweenus.wynnanimated.client.config.ModConfig;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
@@ -25,7 +27,7 @@ public final class WynnPlayerClassCache {
     private static final String API_BASE = "https://api.wynncraft.com/v3/player/";
     private static final long RETRY_DELAY_MS = 60_000;
     private static final long RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-    private static final int MAX_REQUESTS_PER_WINDOW = 60;
+    private static int MAX_REQUESTS_PER_WINDOW = 60;
 
     private static final ConcurrentHashMap<String, String> classCache = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, Long> failedTimestamps = new ConcurrentHashMap<>();
@@ -39,6 +41,11 @@ public final class WynnPlayerClassCache {
     private static final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(5))
             .build();
+
+    public static void applyConfig() {
+        ModConfig cfg = ModConfig.get();
+        MAX_REQUESTS_PER_WINDOW = cfg.rateLimit;
+    }
 
     /**
      * Returns the cached class type for a player, or null if not yet fetched.
@@ -58,7 +65,7 @@ public final class WynnPlayerClassCache {
         // Check rate limit before proceeding
         if (!isBelowRateLimit()) {
             if (AnimationRegistry.debugMode) {
-                System.out.println("[WynnAnimated] Rate limit exceeded for " + username + ", skipping request");
+                System.out.println(WynnanimatedClient.LOG_ID + " [WynnAnimated] Rate limit exceeded for " + username + ", skipping request");
             }
             return null;
         }
@@ -80,17 +87,23 @@ public final class WynnPlayerClassCache {
             if (now - windowStartTime >= RATE_LIMIT_WINDOW_MS) {
                 requestTimestamps.clear();
                 windowStartTime = now;
+                if (AnimationRegistry.debugMode)
+                    System.out.println(WynnanimatedClient.LOG_ID + " Resetting player cache rate limit");
             }
             
             // Check if we're under the limit
             if (requestTimestamps.size() < MAX_REQUESTS_PER_WINDOW) {
                 requestTimestamps.add(now);
+                if (AnimationRegistry.debugMode)
+                    System.out.println(WynnanimatedClient.LOG_ID + " Player cache rate limit = " + requestTimestamps.size() + "/" + MAX_REQUESTS_PER_WINDOW);
                 return true;
             }
             
             // If we're at the limit, check if the oldest request is still within the window
             Long oldest = requestTimestamps.peek();
             if (oldest != null && now - oldest < RATE_LIMIT_WINDOW_MS) {
+                if (AnimationRegistry.debugMode)
+                    System.out.println(WynnanimatedClient.LOG_ID + " Rate limit age: " + ((now - windowStartTime) / 1000) + "/" + (RATE_LIMIT_WINDOW_MS / 1000));
                 return false; // Rate limit exceeded
             }
             
@@ -141,7 +154,7 @@ public final class WynnPlayerClassCache {
                             classCache.put(username, type);
                             failedTimestamps.remove(username);
                             if (AnimationRegistry.debugMode) {
-                                System.out.println("[WynnAnimated] Fetched class for " + username + ": " + type);
+                                System.out.println(WynnanimatedClient.LOG_ID + " [WynnAnimated] Fetched class for " + username + ": " + type);
                             }
                         }
                     }
@@ -158,7 +171,7 @@ public final class WynnPlayerClassCache {
                     failedTimestamps.put(username, System.currentTimeMillis());
                     pendingRequests.remove(username);
                     if (AnimationRegistry.debugMode) {
-                        System.out.println("[WynnAnimated] Failed to fetch class for " + username + ": " + e.getMessage());
+                        System.out.println(WynnanimatedClient.LOG_ID + " [WynnAnimated] Failed to fetch class for " + username + ": " + e.getMessage());
                     }
                     return null;
                 });

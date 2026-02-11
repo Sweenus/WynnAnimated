@@ -91,7 +91,7 @@ public class AnimationRegistry {
     public static List<Identifier> basicAttackList = new ArrayList<>();
 
     public static boolean debugMode = true;
-    public static boolean shouldShowArms = true; // Make this configurable later
+    public static boolean shouldShowArms = true;
     public static final FirstPersonConfiguration firstPersonConfiguration = new FirstPersonConfiguration();
     public static final CustomSoundListener soundListener = new CustomSoundListener();
 
@@ -128,7 +128,7 @@ public class AnimationRegistry {
         // Register pose animations
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(BOW_STANCE_READY_ANIMATION,  8, (AbstractClientPlayerEntity -> new ModifierLayer<>()));
 
-        if (debugMode) System.out.println("Registered WynnAnimated animations");
+        if (debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Registered WynnAnimated animations");
     }
 
     private static final WeakHashMap<AbstractClientPlayerEntity, Map<Identifier, SpeedModifier>> playerSpeedModifiers = new WeakHashMap<>();
@@ -147,7 +147,7 @@ public class AnimationRegistry {
                 speedMods.put(selectedAnimation, speedMod);
             } else {
                 speedMod.speed = speedValue;
-                if (debugMode) System.out.println("Updated existing animation speed modifier to " + speedMod.speed);
+                if (debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Updated existing animation speed modifier to " + speedMod.speed);
             }
 
             // Only update the body-yaw tracking tick for the local player
@@ -160,7 +160,7 @@ public class AnimationRegistry {
                             .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL)
                             .setFirstPersonConfiguration(firstPersonConfiguration), true);
         } else {
-            if (debugMode) System.out.println("Failed to locate animation");
+            if (debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Failed to locate animation");
         }
     }
 
