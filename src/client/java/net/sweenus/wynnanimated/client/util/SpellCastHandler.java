@@ -104,10 +104,11 @@ public class SpellCastHandler {
         ItemStack stack = player.getMainHandStack();
         if (stack.isEmpty()) return false;
 
-        // Try Wynntils class detection first, fall back to weapon-based resolution
+        // Class detection: Wynntils → API → weapon fallback
         String wynnClass = WynntilsCompat.getPlayerClass();
+        String source = "Wynntils";
 
-        Identifier animId;
+        Identifier animId = null;
         if (wynnClass != null) {
             animId = switch (wynnClass) {
                 case "Archer/Hunter" -> AnimationRegistry.BASIC_ATTACK_BOW;
@@ -117,9 +118,22 @@ public class SpellCastHandler {
                 case "Shaman/Skyseer" -> AnimationRegistry.BASIC_ATTACK_RELIK;
                 default -> null;
             };
-        } else {
-            // Wynntils not loaded or class unknown - resolve from held weapon
+        }
+
+        if (animId == null) {
+            // Wynntils unavailable — try API
+            String apiClass = WynnPlayerClassCache.getPlayerClass(player.getGameProfile().getName());
+            if (apiClass != null) {
+                wynnClass = apiClass;
+                source = "API";
+                animId = WynnWeaponResolver.resolveAttackAnimationFromClass(apiClass);
+            }
+        }
+
+        if (animId == null) {
+            // Both failed — resolve from held weapon
             animId = WynnWeaponResolver.resolveAttackAnimation(player);
+            source = "weapon";
         }
         if (animId == null) return false;
 
@@ -131,7 +145,7 @@ public class SpellCastHandler {
             int elapsedTicks = Math.round((1.0f - progress) * cooldownTicks);
             if (elapsedTicks > EARLY_COOLDOWN_THRESHOLD) return false;
         }
-        if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " class is: " + (wynnClass != null ? wynnClass : "inferred from weapon"));
+        if (AnimationRegistry.debugMode) System.out.println(WynnanimatedClient.LOG_ID + " class is: " + (wynnClass != null ? wynnClass : "unknown") + " (source: " + source + ")");
 
         // Don't restart if this animation is already playing (prevents stutter on fast cooldown weapons)
         if (AnimationRegistry.isPlayingCustomAnimation(player, animId)) return true;

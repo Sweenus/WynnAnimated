@@ -2,6 +2,7 @@ package net.sweenus.wynnanimated.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.sweenus.wynnanimated.client.config.ModConfig;
@@ -23,6 +24,7 @@ public class WynnanimatedClient implements ClientModInitializer {
         AnimationRegistry.applyConfig();
         AnimationRegistry.createLists();
         WynnPlayerClassCache.applyConfig();
+        showWarningMessages();
 
         // Track cooldowns for basic attack animation speed
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -39,6 +41,13 @@ public class WynnanimatedClient implements ClientModInitializer {
                     System.out.println(WynnanimatedClient.LOG_ID + " Registered WynnAnimated Sound Listener");
             }
         });
+
+    }
+
+    private static void showWarningMessages() {
+
+        if (FabricLoader.getInstance().isModLoaded("iris"))
+            System.out.println(WynnanimatedClient.LOG_ID + " WARNING: Iris detected. First person animations will not work correctly with shaders enabled.");
 
     }
 

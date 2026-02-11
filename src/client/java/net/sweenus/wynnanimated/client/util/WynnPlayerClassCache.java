@@ -61,7 +61,18 @@ public final class WynnPlayerClassCache {
                 if (client.player != null && client.world != null) {
                     double animationRangeSq = getAnimationRangeSq();
 
-                    // Check nearby players first
+                    // Include local player in cache
+                    String localUsername = getUsernameFromPlayer(client.player);
+                    if (localUsername != null) {
+                        Long lastRefreshed = cachedTimestamps.get(localUsername);
+                        if (lastRefreshed != null && now - lastRefreshed >= 5 * 60_000) {
+                            fetchPlayerClassAsync(localUsername);
+                            if (AnimationRegistry.debugMode)
+                                System.out.println(WynnanimatedClient.LOG_ID + " Refreshing class data for local player " + localUsername);
+                        }
+                    }
+
+                    // Check nearby players
                     for (PlayerEntity player : client.world.getPlayers()) {
                         String username = getUsernameFromPlayer(player);
                         if (username == null || player == client.player) continue;
