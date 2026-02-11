@@ -11,6 +11,7 @@ import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import com.zigythebird.playeranimcore.easing.EasingType;
 import com.zigythebird.playeranimcore.enums.PlayState;
+import net.sweenus.wynnanimated.client.anim.CameraArmPitchModifier;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -149,6 +150,8 @@ public class AnimationRegistry {
                 if (debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Updated existing animation speed modifier to " + speedMod.speed);
             }
 
+            ensureCameraPitchModifier(controller);
+
             // Only update the body-yaw tracking tick for the local player
             if (player == MinecraftClient.getInstance().player) {
                 lastAnimationPlayedTick = player.age;
@@ -169,6 +172,16 @@ public class AnimationRegistry {
         } else {
             if (debugMode) System.out.println(WynnanimatedClient.LOG_ID + " Failed to locate animation");
         }
+    }
+
+    private static void ensureCameraPitchModifier(PlayerAnimationController controller) {
+        int count = controller.getModifierCount();
+        for (int i = 0; i < count; i++) {
+            if (controller.getModifier(i) instanceof CameraArmPitchModifier) {
+                return;
+            }
+        }
+        controller.addModifierLast(new CameraArmPitchModifier());
     }
 
     public static void updateAnimationSpeed(AbstractClientPlayerEntity player, Identifier animationId, float speedValue) {
