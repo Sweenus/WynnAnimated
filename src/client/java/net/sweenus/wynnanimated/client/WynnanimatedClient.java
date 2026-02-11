@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.sweenus.wynnanimated.client.config.ModConfig;
 import net.sweenus.wynnanimated.client.util.WynnCooldownObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,9 @@ public class WynnanimatedClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        ModConfig.load();
         AnimationRegistry.registerAnimations();
-        AnimationRegistry.setFirstPersonConfiguration();
+        AnimationRegistry.applyConfig();
         AnimationRegistry.createLists();
 
         // Track cooldowns for basic attack animation speed

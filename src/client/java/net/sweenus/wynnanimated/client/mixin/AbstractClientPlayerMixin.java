@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.sweenus.wynnanimated.client.AnimationRegistry;
+import net.sweenus.wynnanimated.client.config.ModConfig;
 import net.sweenus.wynnanimated.client.util.AttackTracker;
 import net.sweenus.wynnanimated.client.util.SpellCastHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +30,7 @@ public abstract class AbstractClientPlayerMixin {
     @Unique
     private int lastBowAttackTick = Integer.MIN_VALUE;
     @Unique
-    private static final int STANCE_TIMEOUT_TICKS = 40; // ~2 seconds
+    private int getStanceTimeoutTicks() { return ModConfig.get().stanceTimeoutTicks; }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void wynnanimated$tick(CallbackInfo ci) {
@@ -84,7 +85,7 @@ public abstract class AbstractClientPlayerMixin {
 
         // Idle timeout → fade out stance and return to normal
         if (AnimationRegistry.isPlayingCustomAnimation(player, AnimationRegistry.BOW_STANCE_READY_ANIMATION)
-                && player.age - lastBowAttackTick > STANCE_TIMEOUT_TICKS) {
+                && player.age - lastBowAttackTick > getStanceTimeoutTicks()) {
             AnimationRegistry.fadeOutAnimation(player, AnimationRegistry.BOW_STANCE_READY_ANIMATION, 5);
         }
     }

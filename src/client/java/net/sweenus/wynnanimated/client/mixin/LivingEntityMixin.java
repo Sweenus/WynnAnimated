@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.sweenus.wynnanimated.client.AnimationRegistry;
+import net.sweenus.wynnanimated.client.config.ModConfig;
 import net.sweenus.wynnanimated.client.util.AttackTracker;
 import net.sweenus.wynnanimated.client.util.WynnPlayerClassCache;
 import net.sweenus.wynnanimated.client.util.WynnWeaponResolver;
@@ -22,7 +23,10 @@ public class LivingEntityMixin {
     LivingEntity livingEntity = (LivingEntity) (Object) this;
 
     @Unique
-    private static final double ANIMATION_RANGE_SQ = 20.0 * 20.0;
+    private static double getAnimationRangeSq() {
+        int range = ModConfig.get().animationRange;
+        return (double) range * range;
+    }
 
     @Inject(method = "swingHand(Lnet/minecraft/util/Hand;)V", at = @At("HEAD"), cancellable = true)
     private void wynnanimated$cancelSwing(Hand hand, CallbackInfo ci) {
@@ -39,7 +43,7 @@ public class LivingEntityMixin {
                 && livingEntity instanceof AbstractClientPlayerEntity otherPlayer
                 && livingEntity != mc.player
                 && mc.player != null
-                && otherPlayer.squaredDistanceTo(mc.player) <= ANIMATION_RANGE_SQ) {
+                && otherPlayer.squaredDistanceTo(mc.player) <= getAnimationRangeSq()) {
             String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
             if (classType != null) {
                 Identifier animId = WynnWeaponResolver.resolveAttackAnimationFromClass(classType);
@@ -56,7 +60,7 @@ public class LivingEntityMixin {
 
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || livingEntity == mc.player) return;
-        if (otherPlayer.squaredDistanceTo(mc.player) > ANIMATION_RANGE_SQ) return;
+        if (otherPlayer.squaredDistanceTo(mc.player) > getAnimationRangeSq()) return;
 
         // Detect bow sounds relative to other player position (don't know a better way to detect bow basic attacks)
         // Requires the other player to be on the same channel (does not work with player ghosts)

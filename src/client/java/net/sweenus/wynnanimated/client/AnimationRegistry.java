@@ -16,6 +16,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.sweenus.wynnanimated.client.config.ModConfig;
 import net.sweenus.wynnanimated.client.util.CustomSoundListener;
 
 import java.util.*;
@@ -27,53 +28,53 @@ public class AnimationRegistry {
 
     // Archer Class Spells
     public static final Identifier ARROW_STORM_ANIMATION = Identifier.of(MOD_ID, "arrow_storm");
-    public static final float ARROW_STORM_SPEED = 2.5f;
+    public static float ARROW_STORM_SPEED = 2.5f;
     public static final Identifier ESCAPE_ANIMATION = Identifier.of(MOD_ID, "escape");
-    public static final float ESCAPE_SPEED = 1.5f;
+    public static float ESCAPE_SPEED = 1.5f;
     public static final Identifier BOMB_ANIMATION = Identifier.of(MOD_ID, "arrow_bomb");
-    public static final float BOMB_SPEED = 2.0f;
+    public static float BOMB_SPEED = 2.0f;
     public static final Identifier ARROW_SHIELD_ANIMATION = Identifier.of(MOD_ID, "arrow_shield");
-    public static final float ARROW_SHIELD_SPEED = 1.6f;
+    public static float ARROW_SHIELD_SPEED = 1.6f;
 
     // Assassin Class Spells
     public static final Identifier SPIN_ATTACK_ANIMATION = Identifier.of(MOD_ID, "spin_attack");
-    public static final float SPIN_ATTACK_SPEED = 2.5f;
+    public static float SPIN_ATTACK_SPEED = 2.5f;
     public static final Identifier DASH_ANIMATION = Identifier.of(MOD_ID, "dash");
-    public static final float DASH_SPEED = 1.8f;
+    public static float DASH_SPEED = 1.8f;
     public static final Identifier MULTI_HIT_ANIMATION = Identifier.of(MOD_ID, "multi_hit");
-    public static final float MULTI_HIT_SPEED = 2.1f;
+    public static float MULTI_HIT_SPEED = 2.1f;
     public static final Identifier SMOKE_BOMB_ANIMATION = Identifier.of(MOD_ID, "smoke_bomb");
-    public static final float SMOKE_BOMB_SPEED = 1.9f;
+    public static float SMOKE_BOMB_SPEED = 1.9f;
 
     // Warrior Class Spells
     public static final Identifier BASH_ANIMATION = Identifier.of(MOD_ID, "bash");
-    public static final float BASH_SPEED = 2.1f;
+    public static float BASH_SPEED = 2.1f;
     public static final Identifier CHARGE_ANIMATION = Identifier.of(MOD_ID, "charge");
-    public static final float CHARGE_SPEED = 1.4f;
+    public static float CHARGE_SPEED = 1.4f;
     public static final Identifier WAR_SCREAM_ANIMATION = Identifier.of(MOD_ID, "war_scream");
-    public static final float WAR_SCREAM_SPEED = 2.3f;
+    public static float WAR_SCREAM_SPEED = 2.3f;
     public static final Identifier UPPERCUT_ANIMATION = Identifier.of(MOD_ID, "uppercut");
-    public static final float UPPERCUT_SPEED = 1.8f;
+    public static float UPPERCUT_SPEED = 1.8f;
 
     // Mage Class Spells
     public static final Identifier HEAL_ANIMATION = Identifier.of(MOD_ID, "heal");
-    public static final float HEAL_SPEED = 1.5f;
+    public static float HEAL_SPEED = 1.5f;
     public static final Identifier TELEPORT_ANIMATION = Identifier.of(MOD_ID, "teleport");
-    public static final float TELEPORT_SPEED = 2.0f;
+    public static float TELEPORT_SPEED = 2.0f;
     public static final Identifier METEOR_ANIMATION = Identifier.of(MOD_ID, "meteor");
-    public static final float METEOR_SPEED = 1.8f;
+    public static float METEOR_SPEED = 1.8f;
     public static final Identifier ICE_SNAKE_ANIMATION = Identifier.of(MOD_ID, "ice_snake");
-    public static final float ICE_SNAKE_SPEED = 1.9f;
+    public static float ICE_SNAKE_SPEED = 1.9f;
 
     // Shaman Class Spells
     public static final Identifier TOTEM_ANIMATION = Identifier.of(MOD_ID, "totem");
-    public static final float TOTEM_SPEED = 2.5f;
+    public static float TOTEM_SPEED = 2.5f;
     public static final Identifier HAUL_ANIMATION = Identifier.of(MOD_ID, "haul");
-    public static final float HAUL_SPEED = 1.8f;
+    public static float HAUL_SPEED = 1.8f;
     public static final Identifier UPROOT_ANIMATION = Identifier.of(MOD_ID, "uproot");
-    public static final float UPROOT_SPEED = 2.0f;
+    public static float UPROOT_SPEED = 2.0f;
     public static final Identifier AURA_ANIMATION = Identifier.of(MOD_ID, "aura");
-    public static final float AURA_SPEED = 1.0f;
+    public static float AURA_SPEED = 1.0f;
 
     // Basic Attacks
     public static final Identifier BASIC_ATTACK_BOW = Identifier.of(MOD_ID, "basic_attack_bow");
@@ -84,7 +85,7 @@ public class AnimationRegistry {
 
     // Pose
     public static final Identifier BOW_STANCE_READY_ANIMATION = Identifier.of(MOD_ID, "bow_stance_ready");
-    public static final float BOW_STANCE_READY_SPEED = 1.0f;
+    public static float BOW_STANCE_READY_SPEED = 1.0f;
 
 
     public static List<Identifier> basicAttackList = new ArrayList<>();
@@ -216,16 +217,55 @@ public class AnimationRegistry {
     }
 
     public static void setFirstPersonConfiguration() {
-        if (shouldShowArms)
-            firstPersonConfiguration
-                    .setShowRightArm(true)
-                    .setShowLeftArm(true)
-                    .setShowLeftItem(true)
-                    .setShowRightItem(true)
-                    .setShowArmor(false);
+        firstPersonConfiguration
+                .setShowRightArm(shouldShowArms)
+                .setShowLeftArm(shouldShowArms)
+                .setShowLeftItem(shouldShowArms)
+                .setShowRightItem(shouldShowArms)
+                .setShowArmor(false);
     }
 
     public static boolean isWynntilsLoaded() {
         return FabricLoader.getInstance().isModLoaded(WYNNTILS_MOD_ID);
+    }
+
+    public static void applyConfig() {
+        ModConfig cfg = ModConfig.get();
+
+        debugMode = cfg.debugMode;
+        shouldShowArms = cfg.showArms;
+
+        // Archer
+        ARROW_STORM_SPEED = cfg.arrowStormSpeed;
+        ESCAPE_SPEED = cfg.escapeSpeed;
+        BOMB_SPEED = cfg.bombSpeed;
+        ARROW_SHIELD_SPEED = cfg.arrowShieldSpeed;
+        BOW_STANCE_READY_SPEED = cfg.bowStanceReadySpeed;
+
+        // Assassin
+        SPIN_ATTACK_SPEED = cfg.spinAttackSpeed;
+        DASH_SPEED = cfg.dashSpeed;
+        MULTI_HIT_SPEED = cfg.multiHitSpeed;
+        SMOKE_BOMB_SPEED = cfg.smokeBombSpeed;
+
+        // Warrior
+        BASH_SPEED = cfg.bashSpeed;
+        CHARGE_SPEED = cfg.chargeSpeed;
+        WAR_SCREAM_SPEED = cfg.warScreamSpeed;
+        UPPERCUT_SPEED = cfg.uppercutSpeed;
+
+        // Mage
+        HEAL_SPEED = cfg.healSpeed;
+        TELEPORT_SPEED = cfg.teleportSpeed;
+        METEOR_SPEED = cfg.meteorSpeed;
+        ICE_SNAKE_SPEED = cfg.iceSnakeSpeed;
+
+        // Shaman
+        TOTEM_SPEED = cfg.totemSpeed;
+        HAUL_SPEED = cfg.haulSpeed;
+        UPROOT_SPEED = cfg.uprootSpeed;
+        AURA_SPEED = cfg.auraSpeed;
+
+        setFirstPersonConfiguration();
     }
 }

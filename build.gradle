@@ -37,6 +37,10 @@ repositories {
         name = "KosmX's Maven"
         url = 'https://maven.kosmx.dev/'
     }
+    maven {
+        name = "Terraformers"
+        url = 'https://maven.terraformersmc.com/'
+    }
 }
 
 dependencies {
@@ -48,6 +52,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim}")
+
+    modImplementation("com.terraformersmc:modmenu:13.0.3")
 }
 
 processResources {
