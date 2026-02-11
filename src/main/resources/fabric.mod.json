@@ -7,7 +7,7 @@
   "authors": ["Sweenus"],
   "contact": {},
   "license": "Timefall Development License",
-  "icon": "assets/wynnanimated/icon.png",
+  "icon": "assets/wynnanimated/wa_icon.png",
   "environment": "client",
   "entrypoints": {
     "fabric-datagen": [
