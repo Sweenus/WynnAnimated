@@ -29,6 +29,11 @@ public class LivingEntityMixin {
         return (double) range * range;
     }
 
+    @Unique
+    private static boolean getPlayerAnimations() {
+        return ModConfig.get().animateOtherPlayers;
+    }
+
     @Inject(method = "swingHand(Lnet/minecraft/util/Hand;)V", at = @At("HEAD"), cancellable = true)
     private void wynnanimated$cancelSwing(Hand hand, CallbackInfo ci) {
         MinecraftClient mc = MinecraftClient.getInstance();
@@ -44,6 +49,7 @@ public class LivingEntityMixin {
                 && livingEntity instanceof AbstractClientPlayerEntity otherPlayer
                 && livingEntity != mc.player
                 && mc.player != null
+                && getPlayerAnimations()
                 && otherPlayer.squaredDistanceTo(mc.player) <= getAnimationRangeSq()) {
             String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
             if (classType != null) {
@@ -61,15 +67,15 @@ public class LivingEntityMixin {
 
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || livingEntity == mc.player) return;
-        if (otherPlayer.squaredDistanceTo(mc.player) > getAnimationRangeSq()) return;
+        if ( !getPlayerAnimations() || otherPlayer.squaredDistanceTo(mc.player) > getAnimationRangeSq()) return;
 
         // Detect bow sounds relative to other player position (don't know a better way to detect bow basic attacks)
         // Requires the other player to be on the same channel (does not work with player ghosts)
         if (AnimationRegistry.isSpecificSoundPlayingAtCoordinates(
                 Identifier.of("minecraft", "entity.splash_potion.throw"),
                 otherPlayer.getX(), otherPlayer.getY(), otherPlayer.getZ())) {
-            if (AnimationRegistry.debugMode)
-                System.out.println(WynnanimatedClient.LOG_ID + " Detected bow shoot sound from " + otherPlayer.getDisplayName() + "'s position");
+            //if (AnimationRegistry.debugMode)
+                //System.out.println(WynnanimatedClient.LOG_ID + " Detected bow shoot sound from " + otherPlayer.getDisplayName() + "'s position");
 
             String classType = WynnPlayerClassCache.getPlayerClass(otherPlayer.getGameProfile().getName());
             if ("ARCHER".equals(classType)) {

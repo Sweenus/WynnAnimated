@@ -16,6 +16,7 @@ public class ModConfig {
     // General
     public boolean debugMode = false;
     public boolean showArms = true;
+    public boolean animateOtherPlayers = true;
     public int animationRange = 20;
     public int rateLimit = 40;
     public int stanceTimeoutTicks = 40;
