@@ -3,10 +3,10 @@
   "id": "wynnanimated",
   "version": "${version}",
   "name": "WynnAnimated",
-  "description": "",
-  "authors": [],
+  "description": "Character animations for Wynncraft",
+  "authors": ["Sweenus"],
   "contact": {},
-  "license": "All-Rights-Reserved",
+  "license": "Timefall Development License",
   "icon": "assets/wynnanimated/icon.png",
   "environment": "client",
   "entrypoints": {
