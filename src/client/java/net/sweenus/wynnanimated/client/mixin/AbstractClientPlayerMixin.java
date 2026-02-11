@@ -50,7 +50,6 @@ public abstract class AbstractClientPlayerMixin {
                 player.handSwinging = false;
             }
         } else if (!AnimationRegistry.isPlayingAnyAnimation(player, AnimationRegistry.basicAttackList)
-                && player.isUsingItem()
                 && player.getItemCooldownManager().isCoolingDown(player.getMainHandStack())) {
             SpellCastHandler.performAttackAnimation();
         }

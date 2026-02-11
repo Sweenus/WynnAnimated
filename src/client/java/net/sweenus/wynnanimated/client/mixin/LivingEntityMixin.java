@@ -9,6 +9,7 @@ import net.sweenus.wynnanimated.client.AnimationRegistry;
 import net.sweenus.wynnanimated.client.WynnanimatedClient;
 import net.sweenus.wynnanimated.client.config.ModConfig;
 import net.sweenus.wynnanimated.client.util.AttackTracker;
+import net.sweenus.wynnanimated.client.util.SpellCastHandler;
 import net.sweenus.wynnanimated.client.util.WynnPlayerClassCache;
 import net.sweenus.wynnanimated.client.util.WynnWeaponResolver;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,6 +43,17 @@ public class LivingEntityMixin {
         if (livingEntity == mc.player
                 && livingEntity.age - AttackTracker.lastAnimationTick < AttackTracker.SWING_SUPPRESS_TICKS) {
             ci.cancel();
+        }
+
+        // Trigger local player attack animation from swingHand
+        if (hand == Hand.MAIN_HAND
+                && livingEntity == mc.player
+                && livingEntity instanceof AbstractClientPlayerEntity localPlayer
+                && !AnimationRegistry.isPlayingAnyAnimation(localPlayer, AnimationRegistry.basicAttackList)) {
+            if (SpellCastHandler.performAttackAnimation()) {
+                localPlayer.handSwinging = false;
+                ci.cancel();
+            }
         }
 
         // Play attack animation for other players on main hand swing (requires privacy setting to be open: characterDataAccess)
