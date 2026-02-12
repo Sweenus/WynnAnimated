@@ -5,16 +5,16 @@ import net.minecraft.client.sound.SoundInstanceListener;
 import net.minecraft.client.sound.WeightedSoundSet;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CustomSoundListener implements SoundInstanceListener {
 
     private static final double POSITION_TOLERANCE = 2.0;
 
     // Map to store active sounds and their start time
-    private final Map<SoundPositionKey, SoundInfo> activeSounds = new HashMap<>();
+    private final Map<SoundPositionKey, SoundInfo> activeSounds = new ConcurrentHashMap<>();
 
     @Override
     public void onSoundPlayed(SoundInstance sound, WeightedSoundSet soundSet, float range) {
@@ -68,6 +68,23 @@ public class CustomSoundListener implements SoundInstanceListener {
             this.x = x;
             this.y = y;
             this.z = z;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof SoundPositionKey k)) return false;
+            return Double.compare(k.x, x) == 0 && Double.compare(k.y, y) == 0
+                    && Double.compare(k.z, z) == 0 && soundId.equals(k.soundId);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = soundId.hashCode();
+            result = 31 * result + Double.hashCode(x);
+            result = 31 * result + Double.hashCode(y);
+            result = 31 * result + Double.hashCode(z);
+            return result;
         }
     }
 
