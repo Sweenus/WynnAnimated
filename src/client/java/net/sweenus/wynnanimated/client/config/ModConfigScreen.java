@@ -44,6 +44,8 @@ public class ModConfigScreen extends Screen {
         list.addEntry(new FloatSliderEntry("Arrow Bomb Speed", () -> ModConfig.get().bombSpeed, v -> ModConfig.get().bombSpeed = v));
         list.addEntry(new FloatSliderEntry("Arrow Shield Speed", () -> ModConfig.get().arrowShieldSpeed, v -> ModConfig.get().arrowShieldSpeed = v));
         list.addEntry(new FloatSliderEntry("Bow Stance Speed", () -> ModConfig.get().bowStanceReadySpeed, v -> ModConfig.get().bowStanceReadySpeed = v));
+        list.addEntry(new FloatSliderEntry("Shift Arms Down (Archer)", 0.0f, 10.0f, () -> ModConfig.get().firstPersonArcherDownShift, v -> ModConfig.get().firstPersonArcherDownShift = v));
+        list.addEntry(new FloatSliderEntry("Shift Arms Right (Archer)", 0.0f, 20.0f, () -> ModConfig.get().firstPersonArcherRightShift, v -> ModConfig.get().firstPersonArcherRightShift = v));
 
         // Assassin spells
         list.addEntry(new CategoryEntry("Assassin Spells"));
@@ -51,6 +53,7 @@ public class ModConfigScreen extends Screen {
         list.addEntry(new FloatSliderEntry("Dash Speed", () -> ModConfig.get().dashSpeed, v -> ModConfig.get().dashSpeed = v));
         list.addEntry(new FloatSliderEntry("Multi Hit Speed", () -> ModConfig.get().multiHitSpeed, v -> ModConfig.get().multiHitSpeed = v));
         list.addEntry(new FloatSliderEntry("Smoke Bomb Speed", () -> ModConfig.get().smokeBombSpeed, v -> ModConfig.get().smokeBombSpeed = v));
+        list.addEntry(new FloatSliderEntry("Shift Arms Down (Assassin)", 0.0f, 10.0f, () -> ModConfig.get().firstPersonAssassinDownShift, v -> ModConfig.get().firstPersonAssassinDownShift = v));
 
         // Warrior spells
         list.addEntry(new CategoryEntry("Warrior Spells"));
@@ -58,6 +61,7 @@ public class ModConfigScreen extends Screen {
         list.addEntry(new FloatSliderEntry("Charge Speed", () -> ModConfig.get().chargeSpeed, v -> ModConfig.get().chargeSpeed = v));
         list.addEntry(new FloatSliderEntry("War Scream Speed", () -> ModConfig.get().warScreamSpeed, v -> ModConfig.get().warScreamSpeed = v));
         list.addEntry(new FloatSliderEntry("Uppercut Speed", () -> ModConfig.get().uppercutSpeed, v -> ModConfig.get().uppercutSpeed = v));
+        list.addEntry(new FloatSliderEntry("Shift Arms Down (Warrior)", 0.0f, 10.0f, () -> ModConfig.get().firstPersonWarriorDownShift, v -> ModConfig.get().firstPersonWarriorDownShift = v));
 
         // Mage spells
         list.addEntry(new CategoryEntry("Mage Spells"));
@@ -65,6 +69,7 @@ public class ModConfigScreen extends Screen {
         list.addEntry(new FloatSliderEntry("Teleport Speed", () -> ModConfig.get().teleportSpeed, v -> ModConfig.get().teleportSpeed = v));
         list.addEntry(new FloatSliderEntry("Meteor Speed", () -> ModConfig.get().meteorSpeed, v -> ModConfig.get().meteorSpeed = v));
         list.addEntry(new FloatSliderEntry("Ice Snake Speed", () -> ModConfig.get().iceSnakeSpeed, v -> ModConfig.get().iceSnakeSpeed = v));
+        list.addEntry(new FloatSliderEntry("Shift Arms Down (Mage)", 0.0f, 10.0f, () -> ModConfig.get().firstPersonMageDownShift, v -> ModConfig.get().firstPersonMageDownShift = v));
 
         // Shaman spells
         list.addEntry(new CategoryEntry("Shaman Spells"));
@@ -72,6 +77,7 @@ public class ModConfigScreen extends Screen {
         list.addEntry(new FloatSliderEntry("Haul Speed", () -> ModConfig.get().haulSpeed, v -> ModConfig.get().haulSpeed = v));
         list.addEntry(new FloatSliderEntry("Uproot Speed", () -> ModConfig.get().uprootSpeed, v -> ModConfig.get().uprootSpeed = v));
         list.addEntry(new FloatSliderEntry("Aura Speed", () -> ModConfig.get().auraSpeed, v -> ModConfig.get().auraSpeed = v));
+        list.addEntry(new FloatSliderEntry("Shift Arms Down (Shaman)", 0.0f, 10.0f, () -> ModConfig.get().firstPersonShamanDownShift, v -> ModConfig.get().firstPersonShamanDownShift = v));
 
         addDrawableChild(list);
 
@@ -175,8 +181,10 @@ public class ModConfigScreen extends Screen {
         private final ConfigSlider slider;
 
         FloatSliderEntry(String label, Supplier<Float> getter, Consumer<Float> setter) {
-            float min = 0.1f;
-            float max = 6.0f;
+            this(label, 0.1f, 6.0f, getter, setter);
+        }
+
+        FloatSliderEntry(String label, float min, float max, Supplier<Float> getter, Consumer<Float> setter) {
             float current = getter.get();
             double ratio = (current - min) / (max - min);
             slider = new ConfigSlider(0, 0, 310, 20, label, ratio, min, max, getter, setter);

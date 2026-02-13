@@ -20,6 +20,12 @@ public class ModConfig {
     public int animationRange = 20;
     public int rateLimit = 40;
     public int stanceTimeoutTicks = 40;
+    public float firstPersonArcherRightShift = 7.0f;
+    public float firstPersonArcherDownShift = 6.0f;
+    public float firstPersonAssassinDownShift = 0.0f;
+    public float firstPersonWarriorDownShift = 0.0f;
+    public float firstPersonMageDownShift = 0.0f;
+    public float firstPersonShamanDownShift = 0.0f;
 
     // Archer spell speeds
     public float arrowStormSpeed = 2.5f;
